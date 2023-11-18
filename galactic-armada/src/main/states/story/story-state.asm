@@ -4,107 +4,50 @@ INCLUDE "src/main/utils/macros/text-macros.inc"
 
 SECTION "StoryStateASM", ROM0
 
-InitStoryState::
+; ANCHOR_END: init-story-state
+
+; ANCHOR: story-screen-page1
+UpdateStoryState::
 
 	; Turn the LCD on
 	ld a, LCDCF_ON  | LCDCF_BGON|LCDCF_OBJON | LCDCF_OBJ16
 	ld [rLCDC], a
 
-    ret;
-; ANCHOR_END: init-story-state
+UpdateStoryState_Loop::
 
-; ANCHOR: story-screen-data
-Story: 
-    .Line1 db "the galatic empire", 255
-    .Line2 db "rules the galaxy", 255
-    .Line3 db "with an iron", 255
-    .Line4 db "fist.", 255
-    .Line5 db "the rebel force", 255
-    .Line6 db "remain hopeful of", 255
-    .Line7 db "freedoms light", 255
-	
-; ANCHOR_END: story-screen-data
-; ANCHOR: story-screen-page1
-UpdateStoryState::
+    ; Push back onto the stack
+    push de
 
-    ; Call Our function that typewrites text onto background/window tiles
-    ld de, $9821
-    ld hl, Story.Line1
     call DrawText_WithTypewriterEffect
 
-
-    ; Call Our function that typewrites text onto background/window tiles
-    ld de, $9861
-    ld hl, Story.Line2
-    call DrawText_WithTypewriterEffect
-
-
-    ; Call Our function that typewrites text onto background/window tiles
-    ld de, $98A1
-    ld hl, Story.Line3
-    call DrawText_WithTypewriterEffect
-
-
-    ; Call Our function that typewrites text onto background/window tiles
-    ld de, $98E1
-    ld hl, Story.Line4
-    call DrawText_WithTypewriterEffect
-
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ; Wait for A
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-    ; Save the passed value into the variable: mWaitKey
-    ; The WaitForKeyFunction always checks against this vriable
-    ld a,PADF_A
-    ld [mWaitKey], a
-
-    call WaitForKeyFunction
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-; ANCHOR_END: story-screen-page1
-
-
-    call ClearBackground
-
-
-; ANCHOR: story-screen-page2
-    ; Call Our function that typewrites text onto background/window tiles
-    ld de, $9821
-    ld hl, Story.Line5
-    call DrawText_WithTypewriterEffect
-
-
-    ; Call Our function that typewrites text onto background/window tiles
-    ld de, $9861
-    ld hl, Story.Line6
-    call DrawText_WithTypewriterEffect
-
-
-    ; Call Our function that typewrites text onto background/window tiles
-    ld de, $98A1
-    ld hl, Story.Line7
-    call DrawText_WithTypewriterEffect
-
-
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ; Wait for A
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-    ; Save the passed value into the variable: mWaitKey
-    ; The WaitForKeyFunction always checks against this vriable
-    ld a,PADF_A
-    ld [mWaitKey], a
-
-    call WaitForKeyFunction
+    ; Increase 'de' by 64
+    pop de
+    ld a, e
+    add 64
+    ld e, a
+    ld a, d
+    adc a,0
+    ld d, a
     
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ; move to the next character and next background tile
+    inc hl
 
+    ; End if we've reached 255
+    ld a, [hl]
+    cp 255
+    jp z, UpdateStoryState_EndLoop
+
+    jp UpdateStoryState_Loop
+
+UpdateStoryState_EndLoop::
+
+    push hl
+
+    call WaitForAButtonFunction
+
+    ; Restore hl from when we ended our loop
+    pop hl
+    
+    ret
     
 ; ANCHOR_END: story-screen-page2
-
-; ANCHOR: story-screen-end
-    ld a, 2
-    ld [wGameState],a
-    jp NextGameState
-; ANCHOR_END: story-screen-end

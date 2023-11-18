@@ -1,16 +1,12 @@
 ; ANCHOR: title-screen-start
 INCLUDE "src/main/utils/hardware.inc"
 INCLUDE "src/main/utils/macros/text-macros.inc"
+INCLUDE "src/main/utils/macros/text-macros.inc"
+INCLUDE "src/main/utils/macros/story-macros.inc"
+INCLUDE "src/main/utils/macros/tilemap-macros.inc"
 
 SECTION "TitleScreenState", ROM0
 
-wPressPlayText::  db "press a to play", 255
- 
-titleScreenTileData: INCBIN "src/generated/backgrounds/title-screen.2bpp"
-titleScreenTileDataEnd:
- 
-titleScreenTileMap: INCBIN "src/generated/backgrounds/title-screen.tilemap"
-titleScreenTileMapEnd:
 ; ANCHOR_END: title-screen-start
 ; ANCHOR: title-screen-init
 InitTitleScreenState::
@@ -36,43 +32,15 @@ InitTitleScreenState::
 
     ret;
 ; ANCHOR_END: title-screen-init
-	
-; ANCHOR: draw-title-screen
-DrawTitleScreen::
-	
-	; Copy the tile data
-	ld de, titleScreenTileData ; de contains the address where data will be copied from;
-	ld hl, $9340 ; hl contains the address where data will be copied to;
-	ld bc, titleScreenTileDataEnd - titleScreenTileData ; bc contains how many bytes we have to copy.
-	call CopyDEintoMemoryAtHL;
-	
-	; Copy the tilemap
-	ld de, titleScreenTileMap
-	ld hl, $9800
-	ld bc, titleScreenTileMapEnd - titleScreenTileMap
-	call CopyDEintoMemoryAtHL_With52Offset
 
-	ret
-; ANCHOR_END: draw-title-screen
-	
 ; ANCHOR: update-title-screen
 UpdateTitleScreenState::
 
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ; Wait for A
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    call WaitForAButtonFunction
 
-    ; Save the passed value into the variable: mWaitKey
-    ; The WaitForKeyFunction always checks against this vriable
-    ld a,PADF_A
-    ld [mWaitKey], a
+GotoGameplay:
 
-    call WaitForKeyFunction
-
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-    ld a, 1
+    ld a, 2
     ld [wGameState],a
     jp NextGameState
 ; ANCHOR_END: update-title-screen

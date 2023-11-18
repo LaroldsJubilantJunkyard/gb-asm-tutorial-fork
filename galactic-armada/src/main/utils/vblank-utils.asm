@@ -7,6 +7,14 @@ wVBlankCount:: db
 
 SECTION "VBlankFunctions", ROM0
 
+WaitForVBlankStart::
+
+	ld a, [rLY] ; Copy the vertical line to a
+	cp 144 ; Check if the vertical line (in a) is 0
+	jp nc, WaitForVBlankStart ; A conditional jump. The condition is that 'c' is set, the last operation overflowed
+
+    ret
+
 WaitForOneVBlank::
 
     ; Wait a small amount of time

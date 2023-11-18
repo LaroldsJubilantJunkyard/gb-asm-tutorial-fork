@@ -118,3 +118,10 @@ clean:
 # Declare these targets as "not actually files".
 .PHONY: clean all
 
+$(foreach i, $(PREPARE_DIRECTORIES), $(eval $(call ensure-directory,$i)))
+
+# Clean up generated directories.
+clean:
+	rm -rfv  $(PREPARE_DIRECTORIES)
+# Declare these targets as "not actually files".
+.PHONY: clean all

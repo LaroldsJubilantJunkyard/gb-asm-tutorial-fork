@@ -107,7 +107,7 @@ UpdateGameplayState::
 
 	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ; Call our function that performs the code
-    call WaitForOneVBlank
+    call WaitForVBlankStart
 	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	; from: https://github.com/eievui5/gb-sprobj-lib
@@ -117,7 +117,7 @@ UpdateGameplayState::
 
 	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ; Call our function that performs the code
-    call WaitForOneVBlank
+    ; call WaitForOneVBlank
 	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	
 	jp UpdateGameplayState

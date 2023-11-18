@@ -3,11 +3,29 @@ include "src/main/utils/hardware.inc"
 
 SECTION "Background", ROM0
 
-ClearBackground::
+
+
+HalfClearBackground::
+
+	call WaitForVBlankStart
 
 	; Turn the LCD off
 	ld a, 0
 	ld [rLCDC], a
+
+	ld bc,256
+	ld hl, $9920
+
+	jp ClearBackgroundLoop
+
+ClearBackground::
+
+	call WaitForVBlankStart
+
+	; Turn the LCD off
+	ld a, 0
+	ld [rLCDC], a
+
 
 	ld bc,1024
 	ld hl, $9800
