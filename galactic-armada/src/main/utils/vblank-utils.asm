@@ -15,6 +15,14 @@ WaitForVBlankStart::
 
     ret
 
+WaitForVBlankEnd::
+
+	ld a, [rLY] ; Copy the vertical line to a
+	cp 144 ; Check if the vertical line (in a) is 0
+	jp c, WaitForVBlankEnd ; A conditional jump. The condition is that 'c' is set, the last operation overflowed
+
+    ret
+
 WaitForOneVBlank::
 
     ; Wait a small amount of time

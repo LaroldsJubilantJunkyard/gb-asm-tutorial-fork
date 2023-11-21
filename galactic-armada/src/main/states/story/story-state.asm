@@ -13,6 +13,14 @@ UpdateStoryState::
 	ld a, LCDCF_ON  | LCDCF_BGON|LCDCF_OBJON | LCDCF_OBJ16
 	ld [rLCDC], a
 
+    jp UpdateStoryState_Loop
+    
+UpdateStoryStateWindow::
+
+	; Turn the LCD on
+	ld a, LCDCF_ON  | LCDCF_BGON|LCDCF_OBJON | LCDCF_OBJ16 | LCDCF_OBJOFF | LCDCF_WINON | LCDCF_WIN9C00
+	ld [rLCDC], a
+    
 UpdateStoryState_Loop::
 
     ; Push back onto the stack

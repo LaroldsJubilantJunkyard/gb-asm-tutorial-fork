@@ -22,7 +22,7 @@ FIX := $(RGBDS)rgbfix
 
 # Tool flags
 ASMFLAGS := -L
-FIXFLAGS := -v -p 0xFF
+FIXFLAGS := -v -p 0xFF --mbc-type 0x03 --ram-size 0x02
 
 # https://stackoverflow.com/a/18258352
 # Make does not offer a recursive wild card function, so here's one:
@@ -52,7 +52,9 @@ NEEDED_GRAPHICS = \
 	$(GENSPRITES)/bullet.2bpp \
 	$(GENBACKGROUNDS)/text-font.2bpp \
 	$(GENBACKGROUNDS)/star-field.tilemap \
-	$(GENBACKGROUNDS)/title-screen.tilemap
+	$(GENBACKGROUNDS)/title-screen.tilemap \
+	$(GENBACKGROUNDS)/story1.tilemap \
+	$(GENBACKGROUNDS)/ljj-splash-screen.tilemap
 
 # Generate sprites, ensuring the containing directories have been created.
 $(GENSPRITES)/%.2bpp: $(RESSPRITES)/%.png | $(GENSPRITES)

@@ -1,6 +1,7 @@
 ; ANCHOR: entry-point
 INCLUDE "src/main/utils/hardware.inc"
 INCLUDE "src/main/utils/macros/story-macros.inc"
+INCLUDE "src/main/utils/macros/state-macros.inc"
 
 SECTION "GameVariables", WRAM0
 
@@ -22,32 +23,35 @@ EntryPoint:
 
 	; Skip show intro story if we have a save
 	call CheckHasSave
-	jp z, NextGameState
+	jp nz, NotGameFirstRun
 
-GameFirstRun:
+IsGameFirstRun:
 
-	;; Initiate our save data
-	call InitSaveData
+    call GameFirstRun
 
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ; Goto the title screen
+	ld a, TITLE_SCREEN
+	ld [wGameState], a
+	jp NextGameState;
 
-    ; Set our line counter to the top left tile
-    ; Set the story we want to show
-    ld hl, Story1
-    ld de, HalfTextStart
+NotGameFirstRun:
 
-	call UpdateStoryState
-    call HalfClearBackground
+    call WaitForVBlankStart
 
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;    
+    ; Turn the LCD off
+    ld a, 0
+    ld [rLCDC], a
 
-    ; Set our line counter to the top left tile
-    ; Set the story we want to show
-    ld hl, Story2
-    ld de, HalfTextStart
+    ; Load our text font into vram
+	call LoadTextFontIntoVRAM
+    
+	; Turn the LCD on
+	ld a, LCDCF_ON  | LCDCF_BGON|LCDCF_OBJON | LCDCF_OBJ16
+	ld [rLCDC], a
 
-	call UpdateStoryState
+    call WaitForVBlankEnd
 
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-	
+    ; Goto the title screen
+	ld a, TITLE_SCREEN
+	ld [wGameState], a
 	jp NextGameState;

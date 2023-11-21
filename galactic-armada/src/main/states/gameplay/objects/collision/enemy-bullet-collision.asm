@@ -178,6 +178,10 @@ CheckCurrentEnemyAgainstBullets_PerBullet_Y_Overlap:
 ; ANCHOR: enemy-bullet-collision-per-bullet-collision
 CheckCurrentEnemyAgainstBullets_PerBullet_Collision:
 
+    ld a, [wEnemiesKilled]
+    inc a
+    ld [wEnemiesKilled], a
+
     ; set the active byte  and x value to 0 for bullets
     ld a, 0
     ld [hli], a

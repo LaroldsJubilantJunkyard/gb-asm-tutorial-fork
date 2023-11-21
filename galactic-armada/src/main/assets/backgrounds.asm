@@ -1,9 +1,35 @@
 
-SECTION "Backgrounds", ROM0
+INCLUDE "src/main/utils/hardware.inc"
+SECTION "Backgrounds1",  ROM0
  
+
+ljjSplashScreenTileData: INCBIN "src/generated/backgrounds/ljj-splash-screen.2bpp"
+ljjSplashScreenTileDataEnd:
+ 
+ljjSplashScreenTileMap: INCBIN "src/generated/backgrounds/ljj-splash-screen.tilemap"
+ljjSplashScreenTileMapEnd:
+
+DrawLaroldsJubilantJunkyardSplashScreen::
+
+    ; Copy the tile data
+	ld de, ljjSplashScreenTileData ; de contains the address where data will be copied from;
+	ld hl, $9000 ; hl contains the address where data will be copied to;
+	ld bc, ljjSplashScreenTileDataEnd - ljjSplashScreenTileData ; bc contains how many bytes we have to copy.
+	call CopyDEintoMemoryAtHL;
+	
+	; Copy the tilemap
+	ld de, ljjSplashScreenTileMap ; de contains the address where data will be copied from;
+	ld hl, $9800 ; hl contains the address where data will be copied to;
+	ld bc, ljjSplashScreenTileMapEnd - ljjSplashScreenTileMap ; bc contains how many bytes we have to copy.
+	call CopyDEintoMemoryAtHL
+	
+	ret
 
 	
 ; ANCHOR: draw-title-screen
+
+
+SECTION "Backgrounds", ROM0
 
 titleScreenTileData: INCBIN "src/generated/backgrounds/title-screen.2bpp"
 titleScreenTileDataEnd:

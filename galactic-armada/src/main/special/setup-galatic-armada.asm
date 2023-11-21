@@ -8,9 +8,6 @@ SetupGalaticArmada::
 	ld a, 0
 	ld [rNR52], a
 
-	ld a, 0
-	ld [wGameState], a
-
 	; Wait for the vertical blank phase before initiating the library
     call WaitForVBlankStart
 
@@ -22,9 +19,6 @@ SetupGalaticArmada::
 	; Turn the LCD off
 	ld a, 0
 	ld [rLCDC], a
-
-	; Load our common text font into VRAM
-	call LoadTextFontIntoVRAM
 
 	; Turn the LCD on
 	ld a, LCDCF_ON  | LCDCF_BGON|LCDCF_OBJON | LCDCF_OBJ16 | LCDCF_WINON | LCDCF_WIN9C00

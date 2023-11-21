@@ -8,6 +8,7 @@ wCurrentEnemyX:: db
 wCurrentEnemyY:: db  
 
 wSpawnCounter: db  
+wEnemiesKilled:: db  
 wNextEnemyXPosition: db
 wActiveEnemyCounter::db
 wUpdateEnemiesCounter:db
@@ -31,6 +32,9 @@ enemyShipMetasprite::
 
 ; ANCHOR: enemies-initialize
 InitializeEnemies::
+
+    ld a, 0
+    ld [wEnemiesKilled], a
 
 	ld de, enemyShipTileData
 	ld hl, ENEMY_TILES_START
@@ -309,6 +313,18 @@ UpdateEnemies_NoCollisionWithPlayer::
 
 ; ANCHOR: enemies-spawn
 TryToSpawnEnemies::
+	ld a, [wCurrentWaveItem]
+	ld h, a
+	ld a, [wCurrentWaveItem+1]
+	ld l, a
+    inc hl
+
+	ld a, [wEnemiesKilled]
+	ld b, a
+	ld a, [hl]
+	cp a, b
+
+    ret c
 
     ; Increase our spwncounter
     ld a, [wSpawnCounter]

@@ -1,4 +1,5 @@
 INCLUDE "src/main/utils/hardware.inc"
+INCLUDE "src/main/utils/macros/state-macros.inc"
 
 ; ANCHOR: next-game-state
 SECTION "GameStateManagement", ROM0
@@ -32,20 +33,27 @@ NextGameState::
 
 	call ClearCurrentGameState
 
-	; Initiate the next state
-	ld a, [wGameState]
-	cp a, 2 ; 2 = Gameplay
-	call z, InitGameplayState
-	ld a, [wGameState]
-	cp a, 0 ; 0 = Menu
-	call z, InitTitleScreenState
-
 	; Update the next state
 	ld a, [wGameState]
-	cp a, 2 ; 2 = Gameplay
-	jp z, UpdateGameplayState
-	cp a, 1 ; 1 = Story
-	jp z, UpdateStoryState
-	jp UpdateTitleScreenState
+
+	cp a, LEVEL_SELECT 
+	jp z, StartLevelSelect
+
+	cp a, GAMEPLAY_RESULTS
+	jp z, StartGameplayResults
+
+	cp a, TITLE_SCREEN
+	jp z, StartTitleScreenState
+
+	cp a, PRE_GAMEPLAY_BRIDGE
+	jp z, StartPreGameplayBridge
+
+	cp a, GAMEPLAY
+	jp z, StartGameplayState
+
+	cp a, POST_GAMEPLAY_BRIDGE
+	jp z, StartPostGameplayBridge
+	
+	jp StartTitleScreenState
 
 ; ANCHOR_END: next-game-state
