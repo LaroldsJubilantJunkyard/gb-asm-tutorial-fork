@@ -21,7 +21,8 @@ StartGameplayState::
 
 	call LoadScoreFromSave
 
-	call InitializeBackground
+	call InitializeBackgroundAndProgressCurrentWaveItem
+
 	call InitializePlayer
 	call InitializeBullets
 	call InitializeEnemies

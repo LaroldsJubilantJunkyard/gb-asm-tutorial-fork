@@ -8,9 +8,51 @@ mBackgroundScroll:: dw
 
 SECTION "GameplayBackgroundSection", ROM0
 
-InitializeBackground::
+InitializeBackgroundAndProgressCurrentWaveItem::
 
-	call DrawStarField
+	; Get the address of the current wave item type
+	ld a, [wCurrentWaveItem]
+	ld h, a
+	ld a, [wCurrentWaveItem+1]
+	ld l, a
+
+	ld a, [hli]
+	ld e, a
+	ld a, [hli]
+	ld d, a
+
+	ld a, [hli]
+	ld c, a
+	ld a, [hli]
+	ld b, a
+	
+	push hl
+
+	; Copy the tilemap
+	ld hl, $9340
+    call CopyDEintoMemoryAtHL
+
+	pop hl
+
+	ld a, [hli]
+	ld e, a
+	ld a, [hli]
+	ld d, a
+
+	ld a, [hli]
+	ld c, a
+	ld a, [hli]
+	ld b, a
+
+	; Update our current wave item
+	ld a, h
+	ld  [wCurrentWaveItem], a
+	ld a, l
+	ld [wCurrentWaveItem+1], a
+
+	; Copy the tilemap
+	ld hl, $9800
+    call CopyDEintoMemoryAtHL_With52Offset
 
 	ld a, 0
 	ld [mBackgroundScroll+0],a

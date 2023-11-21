@@ -37,6 +37,14 @@ EndLevelSelectBack::
 
 EndLevelSelect::
 
-    ld a, POST_GAMEPLAY_BRIDGE
+    ; Load level 1 into our current wave item
+	ld hl, wLevel1
+	ld a, h
+	ld [wCurrentWaveItem], a
+	ld a, l
+	ld [wCurrentWaveItem+1], a
+
+
+    ld a, PRE_GAMEPLAY_BRIDGE
     ld [wGameState],a
     jp NextGameState
