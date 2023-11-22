@@ -12,19 +12,16 @@ StartDefaultGameplayLoop::
 	
 	call WaitForVBlankStart
 
-	; Initiate STAT interrupts
-	call InitStatInterrupts
-
 	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 	;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 	; Call Our function that draws text onto background/window tiles
-    ld de, $9c00
+    ld de, $9C00
     ld hl, wScoreText
     call DrawTextTilesLoop
 
 	; Call Our function that draws text onto background/window tiles
-    ld de, $9c0D
+    ld de, $9C0D
     ld hl, wLivesText
     call DrawTextTilesLoop
 	

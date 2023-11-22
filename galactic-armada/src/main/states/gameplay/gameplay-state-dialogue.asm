@@ -8,7 +8,6 @@ SECTION "DialogueGameplayState", ROM0
 StartDialogueGameLoop::
 
 	call WaitForVBlankStart
-	call DisableInterrupts
 	call ClearWindow
 
 	ld a, 144
@@ -30,10 +29,14 @@ RaiseWindowLoop:
 	dec a
 	ld [rWY], a
 
-	call WaitForOneVBlank
+    ; Wait a small amount of time
+    ; Save our count in this variable
+    ld a, 2
+    ld [wVBlankCount], a
+	call WaitForVBlankFunction
 
 	ld a, [rWY]
-	cp a, 96
+	cp a, 88
 	jp nc, RaiseWindowLoop
 	
 	; Get the current wave item
@@ -55,14 +58,11 @@ RaiseWindowLoop:
 	; draw the message typewriter style on the window
     ld de, $9c61
 	call UpdateStoryStateWindow
+	
 
 	; move pass the message to the next item
 	; Then update our current wave item
 	inc hl
-	ld a, h
-	ld [wCurrentWaveItem], a
-	ld a, l
-	ld [wCurrentWaveItem+1], a
 
 LowerWindowLoop:
 
@@ -71,10 +71,20 @@ LowerWindowLoop:
 	inc a
 	ld [rWY], a
 
-	call WaitForOneVBlank
+    ; Wait a small amount of time
+    ; Save our count in this variable
+    ld a, 2
+    ld [wVBlankCount], a
+	call WaitForVBlankFunction
+
 
 	ld a, [rWY]
-	cp a, 144
+	cp 144
 	jp c, LowerWindowLoop
+
+	ld a, h
+	ld [wCurrentWaveItem], a
+	ld a, l
+	ld [wCurrentWaveItem+1], a
 
 	jp UpdateGameplayState

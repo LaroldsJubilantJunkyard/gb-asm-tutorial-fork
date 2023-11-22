@@ -19,6 +19,8 @@ StartGameplayState::
 	ld a, 3
 	ld [wLives+0], a
 
+	call WaitForVBlankStart
+
 	call LoadScoreFromSave
 
 	call InitializeBackgroundAndProgressCurrentWaveItem
@@ -26,6 +28,10 @@ StartGameplayState::
 	call InitializePlayer
 	call InitializeBullets
 	call InitializeEnemies
+	
+
+	; Initiate STAT interrupts
+	call InitStatInterrupts
 
 	; Turn the LCD on
 	ld a, LCDCF_ON  | LCDCF_BGON|LCDCF_OBJON | LCDCF_OBJ16 | LCDCF_WINON | LCDCF_WIN9C00|LCDCF_BG9800
@@ -60,7 +66,7 @@ EndGameplaySuccess::
 
 EndGameplay::
 	
-    ld a, GAMEPLAY_RESULTS
+    ld a, POST_GAMEPLAY_BRIDGE
     ld [wGameState],a
     jp NextGameState
 ; ANCHOR_END: update-gameplay-end-update

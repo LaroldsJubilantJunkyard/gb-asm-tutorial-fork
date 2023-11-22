@@ -6,12 +6,26 @@ SECTION "GameplayResults", ROM0
 
 StartGameplayResults::
 
+    call WaitForVBlankStart
+
+    call ClearBackground
+    call ClearAllSprites
+    
+	; Turn the LCD on including the window. But no sprites
+	ld a, LCDCF_ON | LCDCF_BGON
+	ldh [rLCDC], a
+
+    ; Use the de-scaled low byte as the backgrounds position
+    ld a,0
+	ld [rSCY], a
+
+
 LoopGameplayResults:
 
     call WaitForAButtonFunction
 
 EndGameplayResults::
 
-    ld a, POST_GAMEPLAY_BRIDGE
+    ld a, LEVEL_SELECT 
     ld [wGameState],a
     jp NextGameState

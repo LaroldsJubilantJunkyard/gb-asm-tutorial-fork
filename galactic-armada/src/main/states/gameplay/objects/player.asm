@@ -8,6 +8,7 @@ SECTION "PlayerVariables", WRAM0
 ; first byte is low, second is high (little endian)
 wPlayerPositionX:: dw
 wPlayerPositionY:: dw
+wPlayerObject::ds PER_OBJECT_BYTES_COUNT
 
 mPlayerFlash: dw
 ; ANCHOR_END: player-start
@@ -26,19 +27,32 @@ playerTestMetaSprite::
 ; ANCHOR: player-initialize
 InitializePlayer::
 
+    ; initialize the players object
+    ld hl, wPlayerObject
+    call InitializeObjectAtHL
+
+    ; set the players position
+    ld d,0
+    ld e, 5
+    ld hl, wPlayerObject
+    call PlaceObjectAtHL_XPositionDE
+    call PlaceObjectAtHL_YPositionDE
+    
+    ; set the players metasprite
+    
+    ld hl, wPlayerObject
+    ld d, LOW(playerTestMetaSprite)
+    ld e, HIGH(playerTestMetaSprite)
+    call SetObjectAtHL_MetaspriteInDE
+
+    ; Set the players speed
+    ld hl, wPlayerObject
+    ld b, PLAYER_MOVE_SPEED
+    call SetObjectAtHL_SpeedInB
+
     ld a, 0
     ld [mPlayerFlash+0],a
     ld [mPlayerFlash+1],a
-
-    ; Place in the middle of the screen
-    ld a, 0
-    ld [wPlayerPositionX+0], a
-    ld [wPlayerPositionY+0], a
-
-    ld a, 5
-    ld [wPlayerPositionX+1], a
-    ld [wPlayerPositionY+1], a
-
     
 CopyPlayerTileDataIntoVRAM:
     ; Copy the player's tile data into VRAM
@@ -53,27 +67,32 @@ CopyPlayerTileDataIntoVRAM:
 ; ANCHOR: player-update-start
 UpdatePlayer::
 
-UpdatePlayer_HandleInput:
-
-	ld a, [wCurKeys]
-	and a, PADF_UP
-	call nz, MoveUp
-
-	ld a, [wCurKeys]
-	and a, PADF_DOWN
-	call nz, MoveDown
+    ld hl, wPlayerObject
 
 	ld a, [wCurKeys]
 	and a, PADF_LEFT
-	call nz, MoveLeft
+	call nz, MoveObjectAtHL_Left
 
 	ld a, [wCurKeys]
 	and a, PADF_RIGHT
-	call nz, MoveRight
+	call nz, MoveObjectAtHL_Right
 
 	ld a, [wCurKeys]
+	and a, PADF_DOWN
+	call nz, MoveObjectAtHL_Down
+
+	ld a, [wCurKeys]
+	and a, PADF_UP
+	call nz, MoveObjectAtHL_Up
+
+	ld a, [wNewKeys]
 	and a, PADF_A
-	call nz, TryShoot
+    call nz, FireNextBullet;
+    
+    call DrawObjectAtHL
+
+    ret
+
 ; ANCHOR_END: player-update-start
     
 
@@ -198,16 +217,7 @@ UpdatePlayer_UpdateSprite:
     ret
 ; ANCHOR_END: player-update-sprite
 
-; ANCHOR: player-shoot
-TryShoot:
-	ld a, [wLastKeys]
-	and a, PADF_A
-    ret nz
 
-    call FireNextBullet;
-
-    ret
-; ANCHOR_END: player-shoot
 
 ; ANCHOR: player-damage
 DamagePlayer::

@@ -13,7 +13,7 @@ wLevel1::
     ; todo music somehow
 
     ; Dialogue will always end in 2 consecutive 255's
-    .Wave1_EndSpeech:: db DIALOGUE, "lt john:", 255,  "great shootin tex", 255, 255
+    .Wave1_EndSpeech:: db DIALOGUE, "lt john:", 255,  "destroy all of", 255, "the enemies.",255,255
 
     ; Wave definitions will always have 7 bytes
     .Wave1:: db WAVE_DEFINITION

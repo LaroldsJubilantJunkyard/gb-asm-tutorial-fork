@@ -9,6 +9,6 @@ StartPostGameplayBridge::
 
 EndPostGameplayBridge::
 
-    ld a, LEVEL_SELECT
+    ld a, GAMEPLAY_RESULTS
     ld [wGameState],a
     jp NextGameState
