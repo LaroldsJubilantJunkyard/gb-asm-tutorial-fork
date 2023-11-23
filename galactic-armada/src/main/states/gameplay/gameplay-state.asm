@@ -8,6 +8,8 @@ SECTION "GameplayVariables", WRAM0
 
 wScore:: ds 6
 wLives:: db
+mGlobalFlashCounter:: db
+mGlobalIsVisibleDuringFlashing:: db
 wCurrentWaveItem:: ds 2
 
 SECTION "GameplayState", ROM0
@@ -18,6 +20,12 @@ StartGameplayState::
 
 	ld a, 3
 	ld [wLives+0], a
+
+    ld a, 0
+    ld [mGlobalFlashCounter+0],a
+
+    ld a, 1
+    ld [mGlobalIsVisibleDuringFlashing+0],a
 
 	call WaitForVBlankStart
 
@@ -72,3 +80,26 @@ EndGameplay::
 ; ANCHOR_END: update-gameplay-end-update
 
 
+
+
+IncreaseFlashing::
+
+    ; increase 
+    ld a, [mGlobalFlashCounter+0]
+    add a, 1
+	ld [mGlobalFlashCounter+0], a
+
+	bit 3, a
+	jp nz,IncreaseFlashing_One 
+
+
+IncreaseFlashing_Zero:
+    ld a, 0
+    ld [mGlobalIsVisibleDuringFlashing],a
+	ret
+
+IncreaseFlashing_One:
+    ld a, 1
+    ld [mGlobalIsVisibleDuringFlashing],a
+
+	ret

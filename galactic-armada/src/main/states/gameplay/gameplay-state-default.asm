@@ -58,6 +58,7 @@ DefaultGameplayLoop:
 ; ANCHOR_END: update-gameplay-oam
 	
 ; ANCHOR: update-gameplay-elements
+	call IncreaseFlashing
 	call UpdatePlayer
 	call UpdateEnemies
 	call UpdateBullets

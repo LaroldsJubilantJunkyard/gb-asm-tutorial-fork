@@ -243,7 +243,7 @@ UpdateEnemies_PerEnemy_CheckPlayerCollision:
 
     push hl
 
-    call DamagePlayer
+    call DamageObjectAtHL
     call DrawLives
 
     pop hl

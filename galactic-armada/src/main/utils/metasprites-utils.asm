@@ -6,7 +6,7 @@ wMetaspriteAddress:: dw
 wMetaspriteX:: db
 wMetaspriteY::db
 
-SECTION "MetaSprites", ROM0
+SECTION "MetaSpritesUtils", ROM0
 
 DrawMetasprites::
 

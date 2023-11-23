@@ -37,6 +37,9 @@ DEF object_metaspriteLowByte    RB   1
 DEF object_metaspriteHighByte   RB   1
 DEF object_speedByte            RB   1
 DEF object_healthByte           RB   1
+DEF object_damageByte           RB   1
+DEF object_halfWidthByte            RB   1
+DEF object_halfHeightByte           RB   1
 DEF PER_OBJECT_BYTES_COUNT      RB   0
 
 ; from https://rgbds.gbdev.io/docs/v0.6.1/rgbasm.5#EXPRESSIONS

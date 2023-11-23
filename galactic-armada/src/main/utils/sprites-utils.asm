@@ -7,7 +7,7 @@ wLastOAMAddress:: dw
 wSpritesUsed:: db
 wHelperValue::db
 
-SECTION "Sprites", ROM0
+SECTION "SpriteUtils", ROM0
 
 ClearAllSprites::
 	 

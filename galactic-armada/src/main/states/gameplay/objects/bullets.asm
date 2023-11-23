@@ -5,68 +5,58 @@ include "src/main/utils/constants.inc"
 
 SECTION "BulletVariables", WRAM0
 
+; Do we want to spawn a bullet?
 wSpawnBullet:db
 
 ; how many bullets are currently active
 wActiveBulletCounter:: db
 
-; how many bullet's we've updated
-wUpdateBulletsCounter:db 
-
-; Bytes: active, x , y (low), y (high)
-wBullets:: ds MAX_BULLET_COUNT*PER_BULLET_BYTES_COUNT
+wBullets:: ds MAX_BULLET_COUNT*PER_OBJECT_BYTES_COUNT
+wBulletsEnd: db ; we'll manually set this to 255 so we can easily loop through bullets
 
 SECTION "Bullets", ROM0
-
-bulletMetasprite::
-    .metasprite1    db 0,0,8,0
-    .metaspriteEnd  db 128
-
-bulletTileData:: INCBIN "src/generated/sprites/bullet.2bpp"
-bulletTileDataEnd::
-
 
 ; ANCHOR_END: bullets-top
 
 ; ANCHOR: bullets-initialize
 InitializeBullets::
 
+    ld a, 255
+    ld [wBulletsEnd], a
+
     ld a, 0
     ld [wSpawnBullet], a
-
-    ; Copy the bullet tile data intto vram
-	ld de, bulletTileData
-	ld hl, BULLET_TILES_START
-	ld bc, bulletTileDataEnd - bulletTileData
-    call CopyDEintoMemoryAtHL
 
     ; Reset how many bullets are active to 0
     ld a,0
     ld [wActiveBulletCounter],a
 
+    call AddBulletSpritesToVRAM
+
     ld b, 0
     ld hl, wBullets
+    jp InitializeBullets_Start
 
 InitializeBullets_Loop:
 
-    ld a, 0
-    ld [hl], a
-
-    ; Increase the address
-    ld a, l
-    add a, PER_BULLET_BYTES_COUNT
-    ld l, a
-    ld a, h
-    adc a, 0
-    ld h, a
-
-    ; Increase how many bullets we have initailized
-    ld a, b
-    inc a
-    ld b ,a
-
-    cp a, MAX_BULLET_COUNT
+    ld a, [hl]
+    cp a, 255
     ret z
+
+InitializeBullets_Start:
+
+    call InitializeObjectAtHL
+
+    ; Set the movespeed now
+    ld b, BULLET_MOVE_SPEED
+    call SetObjectAtHL_SpeedInB
+
+    ; Set the metasprite now
+    ld d, LOW(bulletMetasprite)
+    ld e, HIGH(bulletMetasprite)
+    call SetObjectAtHL_MetaspriteInDE
+
+    call MoveToNextObject
 
     jp InitializeBullets_Loop
 ; ANCHOR_END: bullets-initialize
@@ -75,22 +65,16 @@ InitializeBullets_Loop:
 UpdateBullets::
 
     ; Make sure we have SOME active enemies
+    ; OR we want to spawn a bullet
     ld a, [wSpawnBullet]
     ld b, a
     ld a, [wActiveBulletCounter]
     or a,b
     cp a, 0
     ret z
-    
-    ; Reset our counter for how many bullets we have checked
-    ld a, 0
-    ld [wUpdateBulletsCounter], a
 
     ; Get the address of the first bullet in hl
-    ld a, LOW(wBullets)
-    ld l,  a
-    ld a, HIGH(wBullets)
-    ld h, a
+    ld hl, wBullets
 
     jp UpdateBullets_PerBullet
 ; ANCHOR_END: bullets-update-start
@@ -98,24 +82,13 @@ UpdateBullets::
 ; ANCHOR: bullets-update-loop
 UpdateBullets_Loop:
 
-    ; Check our counter, if it's zero
-    ; Stop the function
-    ld a, [wUpdateBulletsCounter]
-    inc a
-    ld [wUpdateBulletsCounter], a
-
-    ; Check if we've already
-    ld a, [wUpdateBulletsCounter]
-    cp a, MAX_BULLET_COUNT
-    ret nc
-
     ; Increase the bullet data our address is pointingtwo
-    ld a, l
-    add a, PER_BULLET_BYTES_COUNT
-    ld l, a
-    ld a, h
-    adc a, 0
-    ld h, a
+    call MoveToNextObject
+
+    ld a, [hl]
+    cp a, 255
+    ret z
+
 ; ANCHOR_END: bullets-update-loop
 
 ; ANCHOR: bullets-update-per
@@ -132,131 +105,16 @@ UpdateBullets_PerBullet:
     ld a, [wSpawnBullet]
     cp a, 0
     jp z, UpdateBullets_Loop
-    
-UpdateBullets_PerBullet_SpawnDeactivatedBullet:
 
-    ; reset this variable so we don't spawn anymore
-    ld a, 0
-    ld [wSpawnBullet], a
-    
-    ; Increase how many bullets are active
-    ld a,[wActiveBulletCounter]
-    inc a
-    ld [wActiveBulletCounter], a
-
-    push hl
-
-    ; Set the current bullet as  active
-    ld a, 1
-    ld [hli], a
-
-    ; Get the unscaled player x position in b
-    ld a, [wPlayerPositionX+0]
-    ld b, a
-    ld a, [wPlayerPositionX+1]
-    ld d, a
-    
-    ; Descale the player's x position
-    ; the result will only be in the low byt
-    srl d
-    rr b
-    srl d
-    rr b
-    srl d
-    rr b
-    srl d
-    rr b
-    
-    ; Set the x position to equal the player's x position
-    ld a, b
-    ld [hli], a
-
-    ; Set the y position (low)
-    ld a, [wPlayerPositionY+0]
-    ld [hli], a
-
-    ;Set the y position (high)
-    ld a, [wPlayerPositionY+1]
-    ld [hli], a
-
-    pop hl
+    call SpawnDeactivatedBullet
 
 UpdateBullets_PerBullet_Normal:
 
-    ; Save our active byte
-    push hl
-
-    inc hl
-
-    ; Get our x position
-    ld a, [hli]
-    ld b, a
-
-    ; get our 16-bit y position
-    ld a, [hl]
-    sub a, BULLET_MOVE_SPEED
-    ld [hli], a
-    ld c, a
-    ld a, [hl] 
-    sbc a, 0
-    ld [hl], a
-    ld d, a
-
-    pop hl; go to the active byte
-
-    ; Descale our y position
-    srl d
-    rr c
-    srl d
-    rr c
-    srl d
-    rr c
-    srl d
-    rr c
-
-    ; See if our non scaled low byte is above 160
-    ld a, c
-    cp a, 178
-    ; If it below 160, continue on  to deactivate
-    jp nc, UpdateBullets_DeActivateIfOutOfBounds
+    call MoveObjectAtHL_Up
+    call DrawObjectAtHL
+    call GetObjectAtHLIsOutOfBounds
     
-; ANCHOR_END: bullets-update-per
-; ANCHOR: draw-bullets
-
-    push hl
-
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ;; Drawing a metasprite
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-     ; Save the address of the metasprite into the 'wMetaspriteAddress' variable
-    ; Our DrawMetasprites functoin uses that variable
-    ld a, LOW(bulletMetasprite)
-    ld [wMetaspriteAddress+0], a
-    ld a, HIGH(bulletMetasprite)
-    ld [wMetaspriteAddress+1], a
-
-    ; Save the x position
-    ld a, b
-    ld [wMetaspriteX],a
-
-    ; Save the y position
-    ld a, c
-    ld [wMetaspriteY],a
-
-    ; Actually call the 'DrawMetasprites function
-    call DrawMetasprites;
-    
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;    
-
-    pop hl
-    
-    jp UpdateBullets_Loop
-; ANCHOR_END: draw-bullets
-
-; ANCHOR: deactivate-bullets
-UpdateBullets_DeActivateIfOutOfBounds:
+    jp c, UpdateBullets_Loop
 
     ; if it's y value is grater than 160
     ; Set as inactive
@@ -285,3 +143,35 @@ FireNextBullet::
 
     ret
 ; ANCHOR_END: fire-bullets
+
+    
+SpawnDeactivatedBullet:
+
+    ; reset this variable so we don't spawn anymore
+    ld a, 0
+    ld [wSpawnBullet], a
+    
+    ; Increase how many bullets are active
+    ld a,[wActiveBulletCounter]
+    inc a
+    ld [wActiveBulletCounter], a
+
+    push hl
+
+    ; Set the current bullet as active
+    ld a, 1
+    ld [hli], a
+
+    ; Get the unscaled player x & y position of the player
+    ld a, [wPlayerObject+1]
+    ld [hli], a
+    ld a, [wPlayerObject+2]
+    ld [hli], a
+    ld a, [wPlayerObject+3]
+    ld [hli], a
+    ld a, [wPlayerObject+4]
+    ld [hli], a
+
+    pop hl
+
+    ret
