@@ -11,7 +11,7 @@ bulletTileData:: INCBIN "src/generated/sprites/bullet.2bpp"
 bulletTileDataEnd::
 
 
-AddBulletSpritesToVRAM::
+AddBulletTileDataToVRAM::
     
     ; Copy the bullet tile data intto vram
 	ld de, bulletTileData

@@ -21,29 +21,12 @@ SECTION "Bullets", ROM0
 ; ANCHOR: bullets-initialize
 InitializeBullets::
 
-    ld a, 255
-    ld [wBulletsEnd], a
+    call InitializeGlobalBulletVariables
+    call AddBulletTileDataToVRAM
 
-    ld a, 0
-    ld [wSpawnBullet], a
-
-    ; Reset how many bullets are active to 0
-    ld a,0
-    ld [wActiveBulletCounter],a
-
-    call AddBulletSpritesToVRAM
-
-    ld b, 0
     ld hl, wBullets
-    jp InitializeBullets_Start
 
 InitializeBullets_Loop:
-
-    ld a, [hl]
-    cp a, 255
-    ret z
-
-InitializeBullets_Start:
 
     call InitializeObjectAtHL
 
@@ -57,6 +40,12 @@ InitializeBullets_Start:
     call SetObjectAtHL_MetaspriteInDE
 
     call MoveToNextObject
+
+    ; Check for the wBulletsEnd value of 255
+    ; Stop looping when we read it
+    ld a, [hl]
+    cp a, 255
+    ret z
 
     jp InitializeBullets_Loop
 ; ANCHOR_END: bullets-initialize
@@ -112,19 +101,10 @@ UpdateBullets_PerBullet_Normal:
 
     call MoveObjectAtHL_Up
     call DrawObjectAtHL
+
+    ; check if it's out of bounds
     call GetObjectAtHLIsOutOfBounds
-    
-    jp c, UpdateBullets_Loop
-
-    ; if it's y value is grater than 160
-    ; Set as inactive
-    ld a, 0
-    ld [hl], a
-
-    ; Decrease counter
-    ld a,[wActiveBulletCounter]
-    dec a
-    ld [wActiveBulletCounter], a
+    call nc, DeactivateBulletAtHL
 
     jp UpdateBullets_Loop
 ; ANCHOR_END: deactivate-bullets
@@ -174,4 +154,32 @@ SpawnDeactivatedBullet:
 
     pop hl
 
+    ret
+
+DeactivateBulletAtHL::
+
+    ; if it's y value is grater than 160
+    ; Set as inactive
+    ld a, 0
+    ld [hl], a
+
+    ; Decrease counter
+    ld a,[wActiveBulletCounter]
+    dec a
+    ld [wActiveBulletCounter], a
+
+    ret;
+
+InitializeGlobalBulletVariables:
+
+
+    ld a, 255
+    ld [wBulletsEnd], a
+
+    ld a, 0
+    ld [wSpawnBullet], a
+
+    ; Reset how many bullets are active to 0
+    ld a,0
+    ld [wActiveBulletCounter],a
     ret
