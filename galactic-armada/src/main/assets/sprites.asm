@@ -20,3 +20,7 @@ AddBulletTileDataToVRAM::
     call CopyDEintoMemoryAtHL
 
     ret
+
+    
+enemyShipTileData:: INCBIN "src/generated/sprites/enemy-ship.2bpp"
+enemyShipTileDataEnd::

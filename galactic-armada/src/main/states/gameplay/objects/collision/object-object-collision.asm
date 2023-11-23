@@ -238,15 +238,14 @@ CheckDifferences2:
     jp z, NoCollision
 
     ld a, 1
-    ld [wResult], a
+    cp a
 
     ret
     
 NoCollision::
 
     ld a, 0
-    ld [wResult], a
-
+    cp a
     ret
 
 ; ANCHOR_END: result
