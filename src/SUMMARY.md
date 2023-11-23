@@ -53,6 +53,7 @@
 - [Conclusion](part3/conclusion.md)
 
 
+[Releasing your game](releasing-your-game.md)
 [Where to go next](next.md)
 [Resources](resources.md)
 [Thanks](thanks.md)
