@@ -1,0 +1,629 @@
+<!DOCTYPE HTML>
+<html lang="it" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Collisioni - GB ASM Tutorial</title>
+
+        <!-- Custom HTML head -->
+        <meta name="twitter:card" content="summary_large_image"/>
+        <meta name="twitter:site:id" content="@gbdev0"/>
+        <meta property="og:title" content="Collisioni - GB ASM Tutorial" />
+        <meta property="og:image" content="https://gbdev.io/gb-asm-tutorial/assets/banner/1200x628.png" />
+        <meta property="og:site_name" content="GB ASM Tutorial"/>
+
+        <meta name="description" content="A complete guide to programming Game Boy games in assembly.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../css/custom.css">
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="../index.html">Home</a></li><li class="chapter-item affix "><a href="../roadmap.html">Tabella di marcia</a></li><li class="chapter-item affix "><a href="../help-feedback.html">Aiuto</a></li><li class="chapter-item affix "><li class="part-title">Parte Ⅰ - Hello World!</li><li class="chapter-item "><a href="../part1/setup.html"><strong aria-hidden="true">1.</strong> Configurazione</a></li><li class="chapter-item "><a href="../part1/hello_world.html"><strong aria-hidden="true">2.</strong> Hello World!</a></li><li class="chapter-item "><a href="../part1/toolchain.html"><strong aria-hidden="true">3.</strong> Strumenti di lavoro</a></li><li class="chapter-item "><a href="../part1/bin_and_hex.html"><strong aria-hidden="true">4.</strong> Binario ed esadecimale</a></li><li class="chapter-item "><a href="../part1/registers.html"><strong aria-hidden="true">5.</strong> Registri</a></li><li class="chapter-item "><a href="../part1/assembly.html"><strong aria-hidden="true">6.</strong> Basi di Assembly</a></li><li class="chapter-item "><a href="../part1/memory.html"><strong aria-hidden="true">7.</strong> Memoria</a></li><li class="chapter-item "><a href="../part1/header.html"><strong aria-hidden="true">8.</strong> L'header</a></li><li class="chapter-item "><a href="../part1/operations.html"><strong aria-hidden="true">9.</strong> Operazioni e flags</a></li><li class="chapter-item "><a href="../part1/jumps.html"><strong aria-hidden="true">10.</strong> Salti</a></li><li class="chapter-item "><a href="../part1/tracing.html"><strong aria-hidden="true">11.</strong> Tracciamento</a></li><li class="chapter-item "><div><strong aria-hidden="true">12.</strong> Grafica</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../part1/tiles.html"><strong aria-hidden="true">12.1.</strong> Tiles</a></li><li class="chapter-item "><a href="../part1/palettes.html"><strong aria-hidden="true">12.2.</strong> Palette</a></li><li class="chapter-item "><a href="../part1/tilemap.html"><strong aria-hidden="true">12.3.</strong> Tilemap</a></li></ol></li><li class="chapter-item "><a href="../part1/wrapup.html"><strong aria-hidden="true">13.</strong> In conclusione</a></li><li class="chapter-item affix "><li class="part-title">Parte Ⅱ - Il nostro primo gioco</li><li class="chapter-item "><a href="../part2/getting-started.html"><strong aria-hidden="true">14.</strong> Per iniziare</a></li><li class="chapter-item "><a href="../part2/objects.html"><strong aria-hidden="true">15.</strong> Oggetti</a></li><li class="chapter-item "><a href="../part2/functions.html"><strong aria-hidden="true">16.</strong> Funzioni</a></li><li class="chapter-item "><a href="../part2/input.html"><strong aria-hidden="true">17.</strong> Input</a></li><li class="chapter-item expanded "><a href="../part2/collision.html" class="active"><strong aria-hidden="true">18.</strong> Collisioni</a></li><li class="chapter-item "><a href="../part2/bricks.html"><strong aria-hidden="true">19.</strong> Mattoncini</a></li><li class="chapter-item "><a href="../part2/wip.html"><strong aria-hidden="true">20.</strong> Lavori in corso</a></li><li class="chapter-item affix "><li class="part-title">Parte III — Il nostro secondo gioco</li><li class="chapter-item "><a href="../part3/getting-started.html"><strong aria-hidden="true">21.</strong> Come iniziare</a></li><li class="chapter-item "><a href="../part3/the-starter.html"><strong aria-hidden="true">22.</strong> Download the Starter</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../part3/project-structure.html"><strong aria-hidden="true">22.1.</strong> Struttura del progetto</a></li><li class="chapter-item "><a href="../part3/dependent-libraries.html"><strong aria-hidden="true">22.2.</strong> Dependent Libraries</a></li><li class="chapter-item "><a href="../part3/sprites-backgrounds.html"><strong aria-hidden="true">22.3.</strong> Sprites & Backgrounds</a></li><li class="chapter-item "><a href="../part3/sporbs-metasprites.html"><strong aria-hidden="true">22.4.</strong> Metasprites</a></li><li class="chapter-item "><a href="../part3/drawing-text.html"><strong aria-hidden="true">22.5.</strong> Drawing Text</a></li><li class="chapter-item "><a href="../part3/utilities.html"><strong aria-hidden="true">22.6.</strong> Included Utilities</a></li><li class="chapter-item "><a href="../part3/compilation.html"><strong aria-hidden="true">22.7.</strong> Compilation</a></li></ol></li><li class="chapter-item "><a href="../part3/game-state-management.html"><strong aria-hidden="true">23.</strong> Game State Management</a></li><li class="chapter-item "><a href="../part3/title-screen.html"><strong aria-hidden="true">24.</strong> Schermata del titolo</a></li><li class="chapter-item "><a href="../part3/story-screen.html"><strong aria-hidden="true">25.</strong> Schermata della storia</a></li><li class="chapter-item "><a href="../part3/gameplay.html"><strong aria-hidden="true">26.</strong> Gameplay</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../part3/object-pools.html"><strong aria-hidden="true">26.1.</strong> Object Pools</a></li><li class="chapter-item "><a href="../part3/scrolling-background.html"><strong aria-hidden="true">26.2.</strong> Sfondo scorrevole</a></li><li class="chapter-item "><a href="../part3/heads-up-interface.html"><strong aria-hidden="true">26.3.</strong> Heads-Up Interface</a></li><li class="chapter-item "><a href="../part3/the-player.html"><strong aria-hidden="true">26.4.</strong> Il giocatore</a></li><li class="chapter-item "><a href="../part3/bullets.html"><strong aria-hidden="true">26.5.</strong> Bullets</a></li><li class="chapter-item "><a href="../part3/enemies.html"><strong aria-hidden="true">26.6.</strong> Nemici</a></li><li class="chapter-item "><a href="../part3/collision.html"><strong aria-hidden="true">26.7.</strong> Rilevamento della collisione (collision detection)</a></li><li class="chapter-item "><a href="../part3/collision.html"><strong aria-hidden="true">26.8.</strong> Enemy Collisions</a></li></ol></li><li class="chapter-item "><a href="../part3/conclusion.html"><strong aria-hidden="true">27.</strong> Conclusione</a></li><li class="chapter-item affix "><a href="../next.html">Prossimi passi</a></li><li class="chapter-item affix "><a href="../resources.html">Risorse</a></li><li class="chapter-item affix "><a href="../thanks.html">Ringraziamenti</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">GB ASM Tutorial</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        <button id="language-toggle" class="icon-button" type="button"
+                                title="Change language" aria-label="Change language"
+                                aria-haspopup="true" aria-expanded="false"
+                                aria-controls="language-list">
+                            <i class="fa fa-globe"></i>
+                        </button>
+                        <ul id="language-list" class="theme-popup" aria-label="Languages" role="menu">
+                          <li role="none"><button role="menuitem" class="theme">
+                              <a id="en">English</a>
+                          </button></li>
+                          <li role="none"><button role="menuitem" class="theme">
+                              <a id="it">Italian</a>
+                          </button></li>
+                        </ul>
+
+                        <script>
+                          let langToggle = document.getElementById("language-toggle");
+                          let langList = document.getElementById("language-list");
+                          langToggle.addEventListener("click", (event) => {
+                              langList.style.display = langList.style.display == "block" ? "none" : "block";
+                          });
+                          let selectedLang = document.getElementById("it");
+                          selectedLang.parentNode.classList.add("theme-selected");
+
+                          // The path to the root, taking the current
+                          // language into account.
+                          let full_path_to_root = "../../";
+                          // The page path (mdbook only gives us
+                          // access to the path to the Markdown file).
+                          let path = "part2/collision.md".replace(/\.md$/, ".html");
+                          for (let lang of langList.querySelectorAll("a")) {
+                              if (lang.id == "en") {
+                                  lang.href = `${full_path_to_root}${path}`;
+                              } else {
+                                  lang.href = `${full_path_to_root}${lang.id}/${path}`;
+                              }
+                          }
+                        </script>
+
+                        
+                        <a href="https://github.com/gbdev/gb-asm-tutorial" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/gbdev/gb-asm-tutorial/edit/main/po/it.po"
+                           title="Suggest an edit to the translation" aria-label="Suggest an edit to the translation">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="collisioni"><a class="header" href="#collisioni">Collisioni</a></h1>
+<p>Potersi muovere è fantastico, ma c’è ancora un oggetto di cui abbiamo bisogno per questo gioco: una palla!
+Come per la racchetta, il primo passo è creare un riquadro per la palla e caricarlo nella VRAM.</p>
+<h2 id="grafica"><a class="header" href="#grafica">Grafica</a></h2>
+<p>Add this to the bottom of your file along with the other graphics:</p>
+<pre><code class="language-rgbasm linenos start=570">Ball:
+	dw `00033000
+	dw `00322300
+	dw `03222230
+	dw `03222230
+	dw `00322300
+	dw `00033000
+	dw `00000000
+	dw `00000000
+BallEnd:
+</code></pre>
+<p>Now copy it to VRAM somewhere in your initialization code, e.g. after copying the paddle’s tile.</p>
+<pre><code class="language-rgbasm linenos start=38">	; Copy the ball tile
+	ld de, Ball
+	ld hl, $8010
+	ld bc, BallEnd - Ball
+	call Memcopy
+</code></pre>
+<p>In addition, we need to initialize an entry in OAM, following the code that initializes the paddle.</p>
+<pre><code class="language-rgbasm linenos start=52">	; Initialize the paddle sprite in OAM
+	ld hl, _OAMRAM
+	ld a, 128 + 16
+	ld [hli], a
+	ld a, 16 + 8
+	ld [hli], a
+	ld a, 0
+	ld [hli], a
+	ld [hli], a
+	; Now initialize the ball sprite
+	ld a, 100 + 16
+	ld [hli], a
+	ld a, 32 + 8
+	ld [hli], a
+	ld a, 1
+	ld [hli], a
+	ld a, 0
+	ld [hli], a
+</code></pre>
+<p>As the ball bounces around the screen its momentum will change, sending it in different directions.
+Let’s create two new variables to track the ball’s momentum in each axis: <code>wBallMomentumX</code> and <code>wBallMomentumY</code>.</p>
+<pre><code class="language-rgbasm linenos start=581">SECTION &quot;Counter&quot;, WRAM0
+wFrameCounter: db
+
+SECTION &quot;Input Variables&quot;, WRAM0
+wCurKeys: db
+wNewKeys: db
+
+SECTION &quot;Ball Data&quot;, WRAM0
+wBallMomentumX: db
+wBallMomentumY: db
+</code></pre>
+<p>We will need to initialize these before entering the game loop, so let’s do so right after we write the ball to OAM.
+By setting the X momentum to 1, and the Y momentum to -1, the ball will start out by going up and to the right.</p>
+<pre><code class="language-rgbasm linenos start=61">	; Now initialize the ball sprite
+	ld a, 100 + 16
+	ld [hli], a
+	ld a, 32 + 8
+	ld [hli], a
+	ld a, 1
+	ld [hli], a
+	ld a, 0
+	ld [hli], a
+
+	; The ball starts out going up and to the right
+	ld a, 1
+	ld [wBallMomentumX], a
+	ld a, -1
+	ld [wBallMomentumY], a
+</code></pre>
+<h2 id="lavoro-di-preparazione"><a class="header" href="#lavoro-di-preparazione">Lavoro di preparazione</a></h2>
+<p>Now for the fun part!
+Add a bit of code at the beginning of your main loop that adds the momentum to the OAM positions.
+Notice that since this is the second OAM entry, we use <code>+ 4</code> for Y and <code>+ 5</code> for X.
+This can get pretty confusing, but luckily we only have two objects to keep track of.
+In the future, we’ll go over a much easier way to use OAM.</p>
+<pre><code class="language-rgbasm linenos start=90">Main:
+	ld a, [rLY]
+	cp 144
+	jp nc, Main
+WaitVBlank2:
+	ld a, [rLY]
+	cp 144
+	jp c, WaitVBlank2
+
+	; Add the ball's momentum to its position in OAM.
+	ld a, [wBallMomentumX]
+	ld b, a
+	ld a, [_OAMRAM + 5]
+	add a, b
+	ld [_OAMRAM + 5], a
+
+	ld a, [wBallMomentumY]
+	ld b, a
+	ld a, [_OAMRAM + 4]
+	add a, b
+	ld [_OAMRAM + 4], a
+</code></pre>
+<p>Si consiglia di compilare nuovamente il gioco per vedere cosa fa.
+Se lo fate, dovreste vedere la palla muoversi, ma passerà attraverso i muri e poi volerà fuori dallo schermo.</p>
+<p>Per risolvere questo problema, dobbiamo aggiungere il rilevamento delle collisioni, in modo che la palla possa rimbalzare.
+Dovremo ripetere il controllo delle collisioni un paio di volte, quindi utilizzeremo due funzioni per farlo.</p>
+<div class="box tip">
+<p>Non perdetevi nei dettagli di questa funzione, perché utilizza alcune tecniche e istruzioni che non abbiamo ancora discusso.
+L’idea di base è che converte la posizione dello sprite in una posizione sulla mappa delle piastrelle.
+In questo modo, possiamo controllare quale piastrella sta toccando la nostra palla, in modo da sapere quando rimbalzare!</p>
+</div>
+<pre><code class="language-rgbasm linenos start=226">; Convert a pixel position to a tilemap address
+; hl = $9800 + X + Y * 32
+; @param b: X
+; @param c: Y
+; @return hl: tile address
+GetTileByPixel:
+	; First, we need to divide by 8 to convert a pixel position to a tile position.
+	; After this we want to multiply the Y position by 32.
+	; These operations effectively cancel out so we only need to mask the Y value.
+	ld a, c
+	and a, %11111000
+	ld l, a
+	ld h, 0
+	; Now we have the position * 8 in hl
+	add hl, hl ; position * 16
+	add hl, hl ; position * 32
+	; Convert the X position to an offset.
+	ld a, b
+	srl a ; a / 2
+	srl a ; a / 4
+	srl a ; a / 8
+	; Add the two offsets together.
+	add a, l
+	ld l, a
+	adc a, h
+	sub a, l
+	ld h, a
+	; Add the offset to the tilemap's base address, and we are done!
+	ld bc, $9800
+	add hl, bc
+	ret
+</code></pre>
+<p>The next function is called <code>IsWallTile</code>, and it’s going to contain a list of tiles which the ball can bounce off of.</p>
+<pre><code class="language-rgbasm linenos start=258">; @param a: tile ID
+; @return z: set if a is a wall.
+IsWallTile:
+	cp a, $00
+	ret z
+	cp a, $01
+	ret z
+	cp a, $02
+	ret z
+	cp a, $04
+	ret z
+	cp a, $05
+	ret z
+	cp a, $06
+	ret z
+	cp a, $07
+	ret
+</code></pre>
+<p>Questa funzione può sembrare un po’ strana all’inizio.
+Invece di restituire il risultato in un <em>registro</em>, come <code>a</code>, lo restituisce in <a href="../part1/operations.html#flags">un <em>flag</em></a>: <code>Z</code>!
+Se in qualsiasi punto una piastrella corrisponde, la funzione ha trovato un muro ed esce con <code>Z</code> impostato.
+Se l’ID della piastrella di destinazione (in <code>a</code>) corrisponde a uno degli ID delle piastrelle del muro, il corrispondente <code>cp</code> lascerà <code>Z</code> impostato; in tal caso, si ritorna immediatamente (tramite <code>ret z</code>), con <code>Z</code> impostato.
+Ma se, dopo aver effettuato l’ultimo confronto, <code>Z</code> non viene ancora impostato, sapremo che non abbiamo colpito un muro e non abbiamo bisogno di rimbalzare.</p>
+<h2 id="unificare-il-tutto"><a class="header" href="#unificare-il-tutto">Unificare il tutto</a></h2>
+<p>Time to use these new functions to add collision detection!
+Add the following after the code that updates the ball’s position:</p>
+<pre><code class="language-rgbasm linenos start=112">BounceOnTop:
+	; Remember to offset the OAM position!
+	; (8, 16) in OAM coordinates is (0, 0) on the screen.
+	ld a, [_OAMRAM + 4]
+	sub a, 16 + 1
+	ld c, a
+	ld a, [_OAMRAM + 5]
+	sub a, 8
+	ld b, a
+	call GetTileByPixel ; Returns tile address in hl
+	ld a, [hl]
+	call IsWallTile
+	jp nz, BounceOnRight
+	ld a, 1
+	ld [wBallMomentumY], a
+</code></pre>
+<p>Vedrete che quando carichiamo le posizioni dello sprite, le sottraiamo prima di chiamare <code>GetTileByPixel</code>.
+Forse ricorderete dall’ultimo capitolo che le posizioni OAM sono leggermente sfalsate; cioè, (0, 0) in OAM è in realtà completamente fuori dallo schermo.
+Queste istruzioni <code>sub</code> annullano questo offset.</p>
+<p>Tuttavia, c’è dell’altro: avrete notato che abbiamo sottratto un pixel in più dalla posizione Y. Questo perché (come suggerisce l’etichetta) questo codice controlla la presenza di una piastrella sopra la palla.
+Questo perché (come suggerisce l’etichetta), il codice controlla la presenza di una piastrella sopra la palla.
+In realtà abbiamo bisogno di controllare <em>tutti e quattro</em> i lati della palla, in modo da sapere come cambiare la quantità di moto a seconda del lato che si è scontrato, quindi… aggiungiamo il resto!</p>
+<pre><code class="language-rgbasm linenos start=128">BounceOnRight:
+	ld a, [_OAMRAM + 4]
+	sub a, 16
+	ld c, a
+	ld a, [_OAMRAM + 5]
+	sub a, 8 - 1
+	ld b, a
+	call GetTileByPixel
+	ld a, [hl]
+	call IsWallTile
+	jp nz, BounceOnLeft
+	ld a, -1
+	ld [wBallMomentumX], a
+
+BounceOnLeft:
+	ld a, [_OAMRAM + 4]
+	sub a, 16
+	ld c, a
+	ld a, [_OAMRAM + 5]
+	sub a, 8 + 1
+	ld b, a
+	call GetTileByPixel
+	ld a, [hl]
+	call IsWallTile
+	jp nz, BounceOnBottom
+	ld a, 1
+	ld [wBallMomentumX], a
+
+BounceOnBottom:
+	ld a, [_OAMRAM + 4]
+	sub a, 16 - 1
+	ld c, a
+	ld a, [_OAMRAM + 5]
+	sub a, 8
+	ld b, a
+	call GetTileByPixel
+	ld a, [hl]
+	call IsWallTile
+	jp nz, BounceDone
+	ld a, -1
+	ld [wBallMomentumY], a
+BounceDone:
+</code></pre>
+<p>Era molto, ma ora la palla rimbalza sullo schermo!
+C’è solo un’ultima cosa da fare prima della fine di questo capitolo: la collisione tra palla e paddle.</p>
+<h2 id="rimbalzo-della-pagaia"><a class="header" href="#rimbalzo-della-pagaia">Rimbalzo della pagaia</a></h2>
+<p>A differenza di quanto accade con la tilemap, qui non è necessario effettuare conversioni di posizione, ma solo confronti diretti.
+Tuttavia, per questi ultimi, avremo bisogno <a href="../part1/operations.html#flags">del flag <em>carry</em></a>.
+Il flag di riporto è indicato con <code>C</code>, come il flag zero è indicato con <code>Z</code>, ma non bisogna confonderlo con il registro <code>c</code>!</p>
+<div class="box tip"><p class="box-title">A refresher on comparisons</p>
+<p>Proprio come <code>Z</code>, è possibile utilizzare il flag di riporto per fare salti condizionati.
+Tuttavia, mentre <code>Z</code> viene utilizzato per verificare se due numeri sono uguali, <code>C</code> può essere utilizzato per verificare se un numero è maggiore o minore di un altro.
+Per esempio, <code>cp a, b</code> imposta <code>C</code> se <code>a &lt; b</code> e lo azzera se <code>a &gt;= b</code>.
+(Per verificare <code>a &lt;= b</code> o <code>a &gt; b</code> si possono usare <code>Z</code> e <code>C</code> in tandem con due istruzioni <code>jp</code>)</p>
+</div>
+<p>Armed with this knowledge, let’s work through the paddle bounce code:</p>
+<pre><code class="language-rgbasm linenos start=171">	; First, check if the ball is low enough to bounce off the paddle.
+	ld a, [_OAMRAM]
+	ld b, a
+	ld a, [_OAMRAM + 4]
+	cp a, b
+	jp nz, PaddleBounceDone ; If the ball isn't at the same Y position as the paddle, it can't bounce.
+	; Now let's compare the X positions of the objects to see if they're touching.
+	ld a, [_OAMRAM + 5] ; Ball's X position.
+	ld b, a
+	ld a, [_OAMRAM + 1] ; Paddle's X position.
+	sub a, 8
+	cp a, b
+	jp nc, PaddleBounceDone
+	add a, 8 + 16 ; 8 to undo, 16 as the width.
+	cp a, b
+	jp c, PaddleBounceDone
+
+	ld a, -1
+	ld [wBallMomentumY], a
+
+PaddleBounceDone:
+</code></pre>
+<p>Il controllo della posizione Y è semplice, poiché la nostra racchetta è piatta.
+Tuttavia, la posizione X ha due controlli che ampliano l’area in cui la palla può rimbalzare.
+Innanzitutto aggiungiamo 16 alla posizione della pallina; se la pallina si trova a più di 16 pixel a destra della racchetta, non dovrebbe rimbalzare.
+Poi annulliamo questa operazione sottraendo 16 e, già che ci siamo, sottraiamo altri 8 pixel; se la palla si trova a più di 8 pixel a sinistra della racchetta, non dovrebbe rimbalzare.</p>
+<svg viewBox="-10 -10 860 520">
+	<style>
+		text { text-anchor: middle; fill: var(--fg); font-size: 20px; }
+		.left { text-anchor: start; }
+		.right { text-anchor: end; }
+		.grid { stroke: var(--fg); opacity: 0.7; }
+		.ball { stroke: verde acqua; }
+		.paddle { stroke: orange; }
+		.excl { stroke: red; } text.excl { stroke: initial; fill: red; font-family: "Source Code Pro", Consolas, "Ubuntu Mono", Menlo, "DejaVu Sans Mono", monospace, monospace !important; }
+		/* Sovrapposizioni */
+		rect, polyline { opacity: 0.5; stroke-width: 3; }
+		/* Freccia */
+		poligono { stroke: inherit; fill: var(--bg); }
+		uso + linea { stroke-dasharray: 0 32 999; larghezza tratto: 2; }
+	</style>
+	<defs>
+		<polygon id="arrow-head" points="0,0 -40,-16 -32,0 -40,16" stroke="context-stroke"/>
+		<pattern id="ball-hatched" viewBox="0 0 4 4" width="8" height="8" patternUnits="userSpaceOnUse">
+			<line x1="5" y1="-1" x2="-1" y2="5" class="ball"/>
+			<line x1="5" y1="3" x2="3" y2="5" class="ball"/>
+			<line x1="1" y1="-1" x2="-1" y2="1" class="ball"/>
+		</pattern>
+		<pattern id="paddle-hatched" viewBox="0 0 4 4" width="8" height="8" patternUnits="userSpaceOnUse">
+			<line x1="5" y1="-1" x2="-1" y2="5" class="paddle"/>
+			<line x1="5" y1="3" x2="3" y2="5" class="paddle"/>
+			<line x1="1" y1="-1" x2="-1" y2="1" class="paddle"/>
+		</pattern>
+		<pattern id="excl-hatched" viewBox="0 0 4 4" width="8" height="8" patternUnits="userSpaceOnUse">
+			<line x1="5" y1="-1" x2="-1" y2="5" class="excl"/>
+			<line x1="5" y1="3" x2="3" y2="5" class="excl"/>
+			<line x1="1" y1="-1" x2="-1" y2="1" class="excl"/>
+		</pattern>
+	</defs>
+	<image x="128" y="0" width="256" height="256" href="../assets/part2/img/ball.png"/>
+	<rect x="128" y="0" width="32" height="32" fill="url(#ball-hatched)"/>
+	<image x="288" y="256" width="256" height="256" href="../assets/part2/img/paddle.png"/>
+	<rect x="288" y="256" width="32" height="32" fill="url(#paddle-hatched)"/>
+	<line class="grid" x1="-10" y1="0" x2="850" y2="0"/>
+	<line class="grid" x1="-10" y1="32" x2="850" y2="32"/>
+	<line class="grid" x1="-10" y1="64" x2="850" y2="64"/>
+	<line class="grid" x1="-10" y1="96" x2="850" y2="96"/>
+	<line class="grid" x1="-10" y1="128" x2="850" y2="128"/>
+	<line class="grid" x1="-10" y1="160" x2="850" y2="160"/>
+	<line class="grid" x1="-10" y1="192" x2="850" y2="192"/>
+	<line class="grid" x1="-10" y1="224" x2="850" y2="224"/>
+	<line class="grid" x1="-10" y1="256" x2="850" y2="256"/>
+	<line class="grid" x1="-10" y1="288" x2="850" y2="288"/>
+	<line class="grid" x1="-10" y1="320" x2="850" y2="320"/>
+	<line class="grid" x1="-10" y1="352" x2="850" y2="352"/>
+	<line class="grid" x1="0" y1="-20" x2="0" y2="351"/>
+	<line class="grid" x1="32" y1="-20" x2="32" y2="351"/>
+	<line class="grid" x1="64" y1="-20" x2="64" y2="351"/>
+	<line class="grid" x1="96" y1="-20" x2="96" y2="351"/>
+	<line class="grid" x1="128" y1="-20" x2="128" y2="351"/>
+	<line class="grid" x1="160" y1="-20" x2="160" y2="351"/>
+	<line class="grid" x1="192" y1="-20" x2="192" y2="351"/>
+	<line class="grid" x1="224" y1="-20" x2="224" y2="351"/>
+	<line class="grid" x1="256" y1="-20" x2="256" y2="351"/>
+	<line class="grid" x1="288" y1="-20" x2="288" y2="351"/>
+	<line class="grid" x1="320" y1="-20" x2="320" y2="351"/>
+	<line class="grid" x1="352" y1="-20" x2="352" y2="351"/>
+	<line class="grid" x1="384" y1="-20" x2="384" y2="351"/>
+	<line class="grid" x1="416" y1="-20" x2="416" y2="351"/>
+	<line class="grid" x1="448" y1="-20" x2="448" y2="351"/>
+	<line class="grid" x1="480" y1="-20" x2="480" y2="351"/>
+	<line class="grid" x1="512" y1="-20" x2="512" y2="351"/>
+	<line class="grid" x1="544" y1="-20" x2="544" y2="351"/>
+	<line class="grid" x1="576" y1="-20" x2="576" y2="351"/>
+	<line class="grid" x1="608" y1="-20" x2="608" y2="351"/>
+	<line class="grid" x1="640" y1="-20" x2="640" y2="351"/>
+	<line class="grid" x1="672" y1="-20" x2="672" y2="351"/>
+	<line class="grid" x1="704" y1="-20" x2="704" y2="351"/>
+	<line class="grid" x1="736" y1="-20" x2="736" y2="351"/>
+	<line class="grid" x1="768" y1="-20" x2="768" y2="351"/>
+	<line class="grid" x1="800" y1="-20" x2="800" y2="351"/>
+	<line class="grid" x1="832" y1="-20" x2="832" y2="351"/>
+	<rect x="128" y="0" width="256" height="256" class="ball" style="fill: none;"/>
+	<polyline points="288,352 288,256 544,256 544,352" class="paddle" style="fill: none;"/>
+	<rect x="-15" y="-15" width="47" height="440" class="excl" fill="url(#excl-hatched)"/>
+	<text x="40" y="430" class="excl left">jp c, DoNotBounce</text>
+	<rect x="800" y="-15" width="52" height="510" class="excl" fill="url(#excl-hatched)"/>
+	<text x="790" y="500" class="excl right">jp nc, DoNotBounce</text>
+	<use href="#arrow-head" x="48" y="380" transform="rotate(-180,48,380)" class="paddle"/><line x1="48" y1="380" x2="304" y2="380" class="paddle"/>
+	<text x="176" y="400">- 8</text>
+	<use href="#arrow-head" x="304" y="450" class="paddle"/><line x1="304" y1="450" x2="48" y2="450" class="paddle"/>
+	<use href="#arrow-head" x="816" y="450" class="paddle"/><line x1="816" y1="450" x2="304" y2="450" class="paddle"/>
+	<text x="432" y="470">+ 8 + 16</text>
+</svg>
+<div class="box tip"><p class="box-title">Paddle width</p>
+<p>Ci si potrebbe chiedere perché abbiamo controllato 16 pixel a destra ma solo 8 pixel a sinistra.
+Ricordate che le posizioni OAM rappresentano l’angolo superiore <em>sinistro</em> di uno sprite, quindi il centro della nostra paletta è in realtà 4 pixel a destra della posizione in OAM.
+Se si considera questo, in realtà stiamo controllando 12 pixel su entrambi i lati dal centro della paletta.</p>
+<p>12 pixel possono sembrare molti, ma danno un po’ di tolleranza al giocatore nel caso in cui il suo posizionamento sia sbagliato.
+Se si preferisce rendere il tutto più facile o più difficile, è possibile regolare i valori!</p>
+</div>
+<h2 id="bonus-modifica-dellaltezza-di-rimbalzo"><a class="header" href="#bonus-modifica-dellaltezza-di-rimbalzo">BONUS: modifica dell’altezza di rimbalzo</a></h2>
+<p>Si può notare che la pallina sembra “affondare” un po’ nella paletta prima di rimbalzare. Questo perché la pallina rimbalza quando la sua riga superiore di pixel si allinea con la riga superiore della paletta (si veda l’immagine sopra). Se volete, provate a regolare questo aspetto in modo che la pallina rimbalzi quando la sua fila di pixel inferiore tocca quella superiore della paletta.</p>
+<p>Suggerimento: è possibile farlo con una sola istruzione!</p>
+<details><summary>Risposta:</summary>
+<pre><code class="language-diff linenos start=171">	ld a, [_OAMRAM]
+	ld b, a
+	ld a, [_OAMRAM + 4]
++	add a, 6
+	cp a, b
+</code></pre>
+<p>Alternatively, you can add <code>sub a, 6</code> just after <code>ld a, [_OAMRAM]</code>.</p>
+<p>In entrambi i casi, provate a giocare con il valore <code>6</code>; vedete cosa vi sembra giusto!</p>
+</details>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../part2/input.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../part2/bricks.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../part2/input.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../part2/bricks.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../js/linenos.js"></script>
+
+
+    </body>
+</html>

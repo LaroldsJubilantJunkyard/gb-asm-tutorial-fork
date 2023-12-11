@@ -1,0 +1,339 @@
+<!DOCTYPE HTML>
+<html lang="it" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Binario ed esadecimale - GB ASM Tutorial</title>
+
+        <!-- Custom HTML head -->
+        <meta name="twitter:card" content="summary_large_image"/>
+        <meta name="twitter:site:id" content="@gbdev0"/>
+        <meta property="og:title" content="Binario ed esadecimale - GB ASM Tutorial" />
+        <meta property="og:image" content="https://gbdev.io/gb-asm-tutorial/assets/banner/1200x628.png" />
+        <meta property="og:site_name" content="GB ASM Tutorial"/>
+
+        <meta name="description" content="A complete guide to programming Game Boy games in assembly.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../css/custom.css">
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="../index.html">Home</a></li><li class="chapter-item affix "><a href="../roadmap.html">Tabella di marcia</a></li><li class="chapter-item affix "><a href="../help-feedback.html">Aiuto</a></li><li class="chapter-item affix "><li class="part-title">Parte Ⅰ - Hello World!</li><li class="chapter-item "><a href="../part1/setup.html"><strong aria-hidden="true">1.</strong> Configurazione</a></li><li class="chapter-item "><a href="../part1/hello_world.html"><strong aria-hidden="true">2.</strong> Hello World!</a></li><li class="chapter-item "><a href="../part1/toolchain.html"><strong aria-hidden="true">3.</strong> Strumenti di lavoro</a></li><li class="chapter-item expanded "><a href="../part1/bin_and_hex.html" class="active"><strong aria-hidden="true">4.</strong> Binario ed esadecimale</a></li><li class="chapter-item "><a href="../part1/registers.html"><strong aria-hidden="true">5.</strong> Registri</a></li><li class="chapter-item "><a href="../part1/assembly.html"><strong aria-hidden="true">6.</strong> Basi di Assembly</a></li><li class="chapter-item "><a href="../part1/memory.html"><strong aria-hidden="true">7.</strong> Memoria</a></li><li class="chapter-item "><a href="../part1/header.html"><strong aria-hidden="true">8.</strong> L'header</a></li><li class="chapter-item "><a href="../part1/operations.html"><strong aria-hidden="true">9.</strong> Operazioni e flags</a></li><li class="chapter-item "><a href="../part1/jumps.html"><strong aria-hidden="true">10.</strong> Salti</a></li><li class="chapter-item "><a href="../part1/tracing.html"><strong aria-hidden="true">11.</strong> Tracciamento</a></li><li class="chapter-item "><div><strong aria-hidden="true">12.</strong> Grafica</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../part1/tiles.html"><strong aria-hidden="true">12.1.</strong> Tiles</a></li><li class="chapter-item "><a href="../part1/palettes.html"><strong aria-hidden="true">12.2.</strong> Palette</a></li><li class="chapter-item "><a href="../part1/tilemap.html"><strong aria-hidden="true">12.3.</strong> Tilemap</a></li></ol></li><li class="chapter-item "><a href="../part1/wrapup.html"><strong aria-hidden="true">13.</strong> In conclusione</a></li><li class="chapter-item affix "><li class="part-title">Parte Ⅱ - Il nostro primo gioco</li><li class="chapter-item "><a href="../part2/getting-started.html"><strong aria-hidden="true">14.</strong> Per iniziare</a></li><li class="chapter-item "><a href="../part2/objects.html"><strong aria-hidden="true">15.</strong> Oggetti</a></li><li class="chapter-item "><a href="../part2/functions.html"><strong aria-hidden="true">16.</strong> Funzioni</a></li><li class="chapter-item "><a href="../part2/input.html"><strong aria-hidden="true">17.</strong> Input</a></li><li class="chapter-item "><a href="../part2/collision.html"><strong aria-hidden="true">18.</strong> Collisioni</a></li><li class="chapter-item "><a href="../part2/bricks.html"><strong aria-hidden="true">19.</strong> Mattoncini</a></li><li class="chapter-item "><a href="../part2/wip.html"><strong aria-hidden="true">20.</strong> Lavori in corso</a></li><li class="chapter-item affix "><li class="part-title">Parte III — Il nostro secondo gioco</li><li class="chapter-item "><a href="../part3/getting-started.html"><strong aria-hidden="true">21.</strong> Come iniziare</a></li><li class="chapter-item "><a href="../part3/the-starter.html"><strong aria-hidden="true">22.</strong> Download the Starter</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../part3/project-structure.html"><strong aria-hidden="true">22.1.</strong> Struttura del progetto</a></li><li class="chapter-item "><a href="../part3/dependent-libraries.html"><strong aria-hidden="true">22.2.</strong> Dependent Libraries</a></li><li class="chapter-item "><a href="../part3/sprites-backgrounds.html"><strong aria-hidden="true">22.3.</strong> Sprites & Backgrounds</a></li><li class="chapter-item "><a href="../part3/sporbs-metasprites.html"><strong aria-hidden="true">22.4.</strong> Metasprites</a></li><li class="chapter-item "><a href="../part3/drawing-text.html"><strong aria-hidden="true">22.5.</strong> Drawing Text</a></li><li class="chapter-item "><a href="../part3/utilities.html"><strong aria-hidden="true">22.6.</strong> Included Utilities</a></li><li class="chapter-item "><a href="../part3/compilation.html"><strong aria-hidden="true">22.7.</strong> Compilation</a></li></ol></li><li class="chapter-item "><a href="../part3/game-state-management.html"><strong aria-hidden="true">23.</strong> Game State Management</a></li><li class="chapter-item "><a href="../part3/title-screen.html"><strong aria-hidden="true">24.</strong> Schermata del titolo</a></li><li class="chapter-item "><a href="../part3/story-screen.html"><strong aria-hidden="true">25.</strong> Schermata della storia</a></li><li class="chapter-item "><a href="../part3/gameplay.html"><strong aria-hidden="true">26.</strong> Gameplay</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../part3/object-pools.html"><strong aria-hidden="true">26.1.</strong> Object Pools</a></li><li class="chapter-item "><a href="../part3/scrolling-background.html"><strong aria-hidden="true">26.2.</strong> Sfondo scorrevole</a></li><li class="chapter-item "><a href="../part3/heads-up-interface.html"><strong aria-hidden="true">26.3.</strong> Heads-Up Interface</a></li><li class="chapter-item "><a href="../part3/the-player.html"><strong aria-hidden="true">26.4.</strong> Il giocatore</a></li><li class="chapter-item "><a href="../part3/bullets.html"><strong aria-hidden="true">26.5.</strong> Bullets</a></li><li class="chapter-item "><a href="../part3/enemies.html"><strong aria-hidden="true">26.6.</strong> Nemici</a></li><li class="chapter-item "><a href="../part3/collision.html"><strong aria-hidden="true">26.7.</strong> Rilevamento della collisione (collision detection)</a></li><li class="chapter-item "><a href="../part3/collision.html"><strong aria-hidden="true">26.8.</strong> Enemy Collisions</a></li></ol></li><li class="chapter-item "><a href="../part3/conclusion.html"><strong aria-hidden="true">27.</strong> Conclusione</a></li><li class="chapter-item affix "><a href="../next.html">Prossimi passi</a></li><li class="chapter-item affix "><a href="../resources.html">Risorse</a></li><li class="chapter-item affix "><a href="../thanks.html">Ringraziamenti</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">GB ASM Tutorial</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        <button id="language-toggle" class="icon-button" type="button"
+                                title="Change language" aria-label="Change language"
+                                aria-haspopup="true" aria-expanded="false"
+                                aria-controls="language-list">
+                            <i class="fa fa-globe"></i>
+                        </button>
+                        <ul id="language-list" class="theme-popup" aria-label="Languages" role="menu">
+                          <li role="none"><button role="menuitem" class="theme">
+                              <a id="en">English</a>
+                          </button></li>
+                          <li role="none"><button role="menuitem" class="theme">
+                              <a id="it">Italian</a>
+                          </button></li>
+                        </ul>
+
+                        <script>
+                          let langToggle = document.getElementById("language-toggle");
+                          let langList = document.getElementById("language-list");
+                          langToggle.addEventListener("click", (event) => {
+                              langList.style.display = langList.style.display == "block" ? "none" : "block";
+                          });
+                          let selectedLang = document.getElementById("it");
+                          selectedLang.parentNode.classList.add("theme-selected");
+
+                          // The path to the root, taking the current
+                          // language into account.
+                          let full_path_to_root = "../../";
+                          // The page path (mdbook only gives us
+                          // access to the path to the Markdown file).
+                          let path = "part1/bin_and_hex.md".replace(/\.md$/, ".html");
+                          for (let lang of langList.querySelectorAll("a")) {
+                              if (lang.id == "en") {
+                                  lang.href = `${full_path_to_root}${path}`;
+                              } else {
+                                  lang.href = `${full_path_to_root}${lang.id}/${path}`;
+                              }
+                          }
+                        </script>
+
+                        
+                        <a href="https://github.com/gbdev/gb-asm-tutorial" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/gbdev/gb-asm-tutorial/edit/main/po/it.po"
+                           title="Suggest an edit to the translation" aria-label="Suggest an edit to the translation">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="binario-ed-esadecimale"><a class="header" href="#binario-ed-esadecimale">Binario ed esadecimale</a></h1>
+<p>Prima di passare al codice dobbiamo introdurre alcuni concetti.</p>
+<p>Quando si programma ad un basso livello è fondamentale capire bene i sistemi <em><a href="https://it.wikipedia.org/wiki/Sistema_numerico_binario">binario</a></em> ed <em><a href="https://it.wikipedia.org/wiki/esadecimale">esadecimale</a></em>.
+Se già conoscessi questi concetti, in fondo alla pagina ci sono delle informazioni specifiche all’uso di RGDBS.</p>
+<p>Cos’è il binario?
+È semplicemente un modo alternativo di rappresentare i numeri, in <em>base 2</em>.
+Noi contiamo in <a href="https://it.wikipedia.org/wiki/decimale">base 10</a>, ovvero con 10 cifre: 0, 1, 2, 3, 4, 5, 6, 7, 8, e 9.
+Le cifre hanno una funzione ben specifica:</p>
+<pre><code>  42 =                       4 × 10   + 2
+     =                       4 × 10^1 + 2 × 10^0
+                                  ↑          ↑
+    These tens come from us counting in base 10!
+
+1024 = 1 × 1000 + 0 × 100  + 2 × 10   + 4
+     = 1 × 10^3 + 0 × 10^2 + 2 × 10^1 + 4 × 10^0
+       ↑          ↑          ↑          ↑
+And here we can see the digits that make up the number!
+</code></pre>
+<div class="box tip decorated"><p>ℹ️</p>
+<p><code>^</code> qui significa “alla potenza di”, dove <code>X^N</code> è uguale a moltiplicare <code>X</code> con se stesso <code>N</code> volte, e <code>X ^ 0 = 1</code>.</p>
+</div>
+<p>Con le cifre decimali ogni numero viene <em>scomposto</em> in maniera univoca in potenze di 10 (il <em>deci</em>male è la base 10, ricordi?).
+Ma perché fermarsi alle potenze di 10?
+Potremmo invece usare altre basi, come la base 2
+(il perché della base 2 sarà spiegato più avanti).</p>
+<p>Il sistema binario è in base 2, quindi ha solo due cifre (chiamate <em>bit</em>): 0 e 1.
+Possiamo quindi generalizzare il principio descritto sopra e riscrivere i due numeri di prima in modo simile:</p>
+<pre><code>  42 =                                                    1 × 32  + 0 × 16  + 1 × 8   + 0 × 4   + 1 × 2   + 0
+     =                                                    1 × 2^5 + 0 × 2^4 + 1 × 2^3 + 0 × 2^2 + 1 × 2^1 + 0 × 2^0
+                                                              ↑         ↑         ↑         ↑         ↑         ↑
+                                          And since now we're counting in base 2, we're seeing twos instead of tens!
+
+1024 = 1 × 1024 + 0 × 512 + 0 × 256 + 0 × 128 + 0 × 64  + 0 × 32  + 0 × 16  + 0 × 8   + 0 × 4   + 0 × 2   + 0
+     = 1 × 2^10 + 0 × 2^9 + 0 × 2^8 + 0 × 2^7 + 0 × 2^6 + 0 × 2^5 + 0 × 2^4 + 0 × 2^3 + 0 × 2^2 + 0 × 2^1 + 0 × 2^0
+       ↑          ↑         ↑         ↑         ↑         ↑         ↑         ↑         ↑         ↑         ↑
+</code></pre>
+<p>Quindi, applicando lo stesso principio, possiamo dire che in base 2, 42 si scrive come <code>101010</code> e 1024 come <code>10000000000</code>. 
+Poiché non è possibile distinguere tra dieci (10 decimale) e due (10 binario), l’assemblaggio RGBDS prevede numeri binari preceduti da un segno di percentuale: 10 è dieci e %10 è due.</p>
+<p>Ok, ma perché proprio la base 2?
+Visto che un bit può essere solo 0 o 1, è molto facile rappresentarlo: può essere “ON” o “OFF”, vuoto o pieno, ecc!
+Se ad esempio si vuole creare una memoria da un bit basta prendere una scatola:
+se è vuota allora simboleggia uno 0; se contiene <em>qualcosa</em>, allora è un 1.
+I computer manipolano quindi principalmente numeri binari e questo ha <em>molte</em> implicazioni, come vedremo nel corso di questo tutorial.</p>
+<h2 id="esadecimale"><a class="header" href="#esadecimale">Esadecimale</a></h2>
+<p>Ricapitolando: il decimale non è pratico per i computer, che si affidano invece ai numeri binari (base 2).
+Ok, ma il binario è davvero difficile da usare per noi programmatori.
+Prendiamo %10000000000, ovvero 2048; mentre per scriverlo in decimale bastano solo 4 cifre, in binario ne servono 12!
+E probabilmente non avete neanche notato che ho scritto uno zero di troppo!
+Per fortuna arriva l’esadecimale a salvare la situazione! 🦸</p>
+<p>La base 16 funziona esattamente come tutte le altre basi, ma con 16 cifre (chiamate “<em>nibbles</em>” in inglese): 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, ed F.</p>
+<pre><code>  42 =            2 × 16   + 10
+     =            2 × 16^1 + A × 16^0
+
+1024 = 4 × 256  + 0 × 16   + 0
+     = 4 × 16^2 + 0 × 16^1 + 0 × 16^0
+</code></pre>
+<p>Come per il binario useremo un prefisso per indicare l’esadecimale, cioè <code>$</code>.
+Quindi, 42 = $2A e 1024 = $400.
+Questo è <em>molto</em> più compatto del binario, e anche un po’ più del decimale; ma ciò che rende l’esadecimale molto interessante è che una sua cifra corrisponde <em>esattamente</em> a 4 bit!</p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: center">Nibble</th><th style="text-align: center">Bits</th></tr></thead><tbody>
+<tr><td style="text-align: center">$0</td><td style="text-align: center">%0000</td></tr>
+<tr><td style="text-align: center">$1</td><td style="text-align: center">%0001</td></tr>
+<tr><td style="text-align: center">$2</td><td style="text-align: center">%0010</td></tr>
+<tr><td style="text-align: center">$3</td><td style="text-align: center">%0011</td></tr>
+<tr><td style="text-align: center">$4</td><td style="text-align: center">%0100</td></tr>
+<tr><td style="text-align: center">$5</td><td style="text-align: center">%0101</td></tr>
+<tr><td style="text-align: center">$6</td><td style="text-align: center">%0110</td></tr>
+<tr><td style="text-align: center">$7</td><td style="text-align: center">%0111</td></tr>
+<tr><td style="text-align: center">$8</td><td style="text-align: center">%1000</td></tr>
+<tr><td style="text-align: center">$9</td><td style="text-align: center">%1001</td></tr>
+<tr><td style="text-align: center">$A</td><td style="text-align: center">%1010</td></tr>
+<tr><td style="text-align: center">$B</td><td style="text-align: center">%1011</td></tr>
+<tr><td style="text-align: center">$C</td><td style="text-align: center">%1100</td></tr>
+<tr><td style="text-align: center">$D</td><td style="text-align: center">%1101</td></tr>
+<tr><td style="text-align: center">$E</td><td style="text-align: center">%1110</td></tr>
+<tr><td style="text-align: center">$F</td><td style="text-align: center">%1111</td></tr>
+</tbody></table>
+</div>
+<p>Ciò rende facilissimo convertire tra binario ed esadecimale, e mantenere una notazione sufficientemente compatta.
+Per questo, l’esadecimale è molto più utilizzato del binario.
+E non preoccuparti, puoi ancora usare il decimale 😜</p>
+<p>(Nota: si potrebbe pensare che anche l’ottale, cioè la base 8, funzioni altrettanto bene; tuttavia avremo a che fare perlopiù con unità di 8 bit, per le quali l’esadecimale funziona molto meglio dell’ottale. Volendo, RGBDS permette di usare l’ottale tramite il prefisso <code>&amp;</code>, ma non l’ho mai visto usare nella pratica)</p>
+<div class="box tip decorated"><p>💡</p>
+<p>Se vi è difficile convertire i numeri tra le diverse basi, controllate se la vostra calcolatrice ha una modalità “programmatore” o un altro modo per convertire i numeri: la maggior parte delle calcolatrici lo ha.</p>
+</div>
+<h2 id="riepilogo"><a class="header" href="#riepilogo">Riepilogo</a></h2>
+<ul>
+<li>In RGBDS assembly, the hexadecimal prefix is <code>$</code>, and the binary prefix is <code>%</code>.</li>
+<li>Hexadecimal can be used as a “compact binary” notation.</li>
+<li>Using binary or hexadecimal is useful when individual bits matter; otherwise, decimal works just as well.</li>
+<li>For when numbers get a bit too long, RGBASM allows underscores between digits (<code>123_465</code>, <code>%10_1010</code>, <code>$DE_AD_BE_EF</code>, etc.)</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../part1/toolchain.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../part1/registers.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../part1/toolchain.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../part1/registers.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../js/linenos.js"></script>
+
+
+    </body>
+</html>

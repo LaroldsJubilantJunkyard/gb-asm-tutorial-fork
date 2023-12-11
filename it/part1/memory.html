@@ -1,0 +1,360 @@
+<!DOCTYPE HTML>
+<html lang="it" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Memoria - GB ASM Tutorial</title>
+
+        <!-- Custom HTML head -->
+        <meta name="twitter:card" content="summary_large_image"/>
+        <meta name="twitter:site:id" content="@gbdev0"/>
+        <meta property="og:title" content="Memoria - GB ASM Tutorial" />
+        <meta property="og:image" content="https://gbdev.io/gb-asm-tutorial/assets/banner/1200x628.png" />
+        <meta property="og:site_name" content="GB ASM Tutorial"/>
+
+        <meta name="description" content="A complete guide to programming Game Boy games in assembly.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../css/custom.css">
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="../index.html">Home</a></li><li class="chapter-item affix "><a href="../roadmap.html">Tabella di marcia</a></li><li class="chapter-item affix "><a href="../help-feedback.html">Aiuto</a></li><li class="chapter-item affix "><li class="part-title">Parte Ⅰ - Hello World!</li><li class="chapter-item "><a href="../part1/setup.html"><strong aria-hidden="true">1.</strong> Configurazione</a></li><li class="chapter-item "><a href="../part1/hello_world.html"><strong aria-hidden="true">2.</strong> Hello World!</a></li><li class="chapter-item "><a href="../part1/toolchain.html"><strong aria-hidden="true">3.</strong> Strumenti di lavoro</a></li><li class="chapter-item "><a href="../part1/bin_and_hex.html"><strong aria-hidden="true">4.</strong> Binario ed esadecimale</a></li><li class="chapter-item "><a href="../part1/registers.html"><strong aria-hidden="true">5.</strong> Registri</a></li><li class="chapter-item "><a href="../part1/assembly.html"><strong aria-hidden="true">6.</strong> Basi di Assembly</a></li><li class="chapter-item expanded "><a href="../part1/memory.html" class="active"><strong aria-hidden="true">7.</strong> Memoria</a></li><li class="chapter-item "><a href="../part1/header.html"><strong aria-hidden="true">8.</strong> L'header</a></li><li class="chapter-item "><a href="../part1/operations.html"><strong aria-hidden="true">9.</strong> Operazioni e flags</a></li><li class="chapter-item "><a href="../part1/jumps.html"><strong aria-hidden="true">10.</strong> Salti</a></li><li class="chapter-item "><a href="../part1/tracing.html"><strong aria-hidden="true">11.</strong> Tracciamento</a></li><li class="chapter-item "><div><strong aria-hidden="true">12.</strong> Grafica</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../part1/tiles.html"><strong aria-hidden="true">12.1.</strong> Tiles</a></li><li class="chapter-item "><a href="../part1/palettes.html"><strong aria-hidden="true">12.2.</strong> Palette</a></li><li class="chapter-item "><a href="../part1/tilemap.html"><strong aria-hidden="true">12.3.</strong> Tilemap</a></li></ol></li><li class="chapter-item "><a href="../part1/wrapup.html"><strong aria-hidden="true">13.</strong> In conclusione</a></li><li class="chapter-item affix "><li class="part-title">Parte Ⅱ - Il nostro primo gioco</li><li class="chapter-item "><a href="../part2/getting-started.html"><strong aria-hidden="true">14.</strong> Per iniziare</a></li><li class="chapter-item "><a href="../part2/objects.html"><strong aria-hidden="true">15.</strong> Oggetti</a></li><li class="chapter-item "><a href="../part2/functions.html"><strong aria-hidden="true">16.</strong> Funzioni</a></li><li class="chapter-item "><a href="../part2/input.html"><strong aria-hidden="true">17.</strong> Input</a></li><li class="chapter-item "><a href="../part2/collision.html"><strong aria-hidden="true">18.</strong> Collisioni</a></li><li class="chapter-item "><a href="../part2/bricks.html"><strong aria-hidden="true">19.</strong> Mattoncini</a></li><li class="chapter-item "><a href="../part2/wip.html"><strong aria-hidden="true">20.</strong> Lavori in corso</a></li><li class="chapter-item affix "><li class="part-title">Parte III — Il nostro secondo gioco</li><li class="chapter-item "><a href="../part3/getting-started.html"><strong aria-hidden="true">21.</strong> Come iniziare</a></li><li class="chapter-item "><a href="../part3/the-starter.html"><strong aria-hidden="true">22.</strong> Download the Starter</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../part3/project-structure.html"><strong aria-hidden="true">22.1.</strong> Struttura del progetto</a></li><li class="chapter-item "><a href="../part3/dependent-libraries.html"><strong aria-hidden="true">22.2.</strong> Dependent Libraries</a></li><li class="chapter-item "><a href="../part3/sprites-backgrounds.html"><strong aria-hidden="true">22.3.</strong> Sprites & Backgrounds</a></li><li class="chapter-item "><a href="../part3/sporbs-metasprites.html"><strong aria-hidden="true">22.4.</strong> Metasprites</a></li><li class="chapter-item "><a href="../part3/drawing-text.html"><strong aria-hidden="true">22.5.</strong> Drawing Text</a></li><li class="chapter-item "><a href="../part3/utilities.html"><strong aria-hidden="true">22.6.</strong> Included Utilities</a></li><li class="chapter-item "><a href="../part3/compilation.html"><strong aria-hidden="true">22.7.</strong> Compilation</a></li></ol></li><li class="chapter-item "><a href="../part3/game-state-management.html"><strong aria-hidden="true">23.</strong> Game State Management</a></li><li class="chapter-item "><a href="../part3/title-screen.html"><strong aria-hidden="true">24.</strong> Schermata del titolo</a></li><li class="chapter-item "><a href="../part3/story-screen.html"><strong aria-hidden="true">25.</strong> Schermata della storia</a></li><li class="chapter-item "><a href="../part3/gameplay.html"><strong aria-hidden="true">26.</strong> Gameplay</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../part3/object-pools.html"><strong aria-hidden="true">26.1.</strong> Object Pools</a></li><li class="chapter-item "><a href="../part3/scrolling-background.html"><strong aria-hidden="true">26.2.</strong> Sfondo scorrevole</a></li><li class="chapter-item "><a href="../part3/heads-up-interface.html"><strong aria-hidden="true">26.3.</strong> Heads-Up Interface</a></li><li class="chapter-item "><a href="../part3/the-player.html"><strong aria-hidden="true">26.4.</strong> Il giocatore</a></li><li class="chapter-item "><a href="../part3/bullets.html"><strong aria-hidden="true">26.5.</strong> Bullets</a></li><li class="chapter-item "><a href="../part3/enemies.html"><strong aria-hidden="true">26.6.</strong> Nemici</a></li><li class="chapter-item "><a href="../part3/collision.html"><strong aria-hidden="true">26.7.</strong> Rilevamento della collisione (collision detection)</a></li><li class="chapter-item "><a href="../part3/collision.html"><strong aria-hidden="true">26.8.</strong> Enemy Collisions</a></li></ol></li><li class="chapter-item "><a href="../part3/conclusion.html"><strong aria-hidden="true">27.</strong> Conclusione</a></li><li class="chapter-item affix "><a href="../next.html">Prossimi passi</a></li><li class="chapter-item affix "><a href="../resources.html">Risorse</a></li><li class="chapter-item affix "><a href="../thanks.html">Ringraziamenti</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">GB ASM Tutorial</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        <button id="language-toggle" class="icon-button" type="button"
+                                title="Change language" aria-label="Change language"
+                                aria-haspopup="true" aria-expanded="false"
+                                aria-controls="language-list">
+                            <i class="fa fa-globe"></i>
+                        </button>
+                        <ul id="language-list" class="theme-popup" aria-label="Languages" role="menu">
+                          <li role="none"><button role="menuitem" class="theme">
+                              <a id="en">English</a>
+                          </button></li>
+                          <li role="none"><button role="menuitem" class="theme">
+                              <a id="it">Italian</a>
+                          </button></li>
+                        </ul>
+
+                        <script>
+                          let langToggle = document.getElementById("language-toggle");
+                          let langList = document.getElementById("language-list");
+                          langToggle.addEventListener("click", (event) => {
+                              langList.style.display = langList.style.display == "block" ? "none" : "block";
+                          });
+                          let selectedLang = document.getElementById("it");
+                          selectedLang.parentNode.classList.add("theme-selected");
+
+                          // The path to the root, taking the current
+                          // language into account.
+                          let full_path_to_root = "../../";
+                          // The page path (mdbook only gives us
+                          // access to the path to the Markdown file).
+                          let path = "part1/memory.md".replace(/\.md$/, ".html");
+                          for (let lang of langList.querySelectorAll("a")) {
+                              if (lang.id == "en") {
+                                  lang.href = `${full_path_to_root}${path}`;
+                              } else {
+                                  lang.href = `${full_path_to_root}${lang.id}/${path}`;
+                              }
+                          }
+                        </script>
+
+                        
+                        <a href="https://github.com/gbdev/gb-asm-tutorial" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/gbdev/gb-asm-tutorial/edit/main/po/it.po"
+                           title="Suggest an edit to the translation" aria-label="Suggest an edit to the translation">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="memoria"><a class="header" href="#memoria">Memoria</a></h1>
+<div class="box tip decorated"><p>🎉</p>
+<p>Congratulazioni, avete appena finito le lezioni più difficili del tutorial!
+Dal momento che avete le basi, d’ora in poi vedremo codice sempre più concreto.</p>
+</div>
+<p>Se guardiamo alla riga 29 leggiamo <code>ld a, [de]</code>.
+Stando a quanto abbiamo appena appreso, questo copia un valore nel registro <code>a</code>… ma da dove?
+Cosa significano queste parentesi?
+Per rispondere dobbiamo parlare della <em>memoria</em>.</p>
+<h2 id="cosè-una-memoria"><a class="header" href="#cosè-una-memoria">Cos’è una memoria?</a></h2>
+<p>Lo scopo della memoria è quello di immagazzinare informazioni.
+Su un foglio di carta o su una lavagna si possono scrivere lettere per memorizzare, ad esempio, la lista della spesa.
+Ma cosa si può memorizzare nella memoria di un computer?
+La risposta a questa domanda è <em>corrente</em><sup class="footnote-reference"><a href="#memoria_magnetica">1</a></sup>.
+La memoria del computer è costituita da piccole celle in grado di immagazzinare corrente.
+Ma, come abbiamo visto nella lezione sul binario, la presenza o l’assenza di corrente può essere utilizzata per codificare i numeri binari!</p>
+<p>Per farla breve: la memoria <strong>immagazzina numeri</strong>.
+Difatti la memoria è una <em>lunga</em> lista di numeri, memorizzati in celle.
+Per identificare in modo univoco ogni cella, le viene assegnato un numero (e che altro!) chiamato <em>indirizzo</em>.
+Come i numeri civici!
+La prima cella ha l’indirizzo 0, poi l’indirizzo 1, 2 e così via.
+Sul Game Boy ogni cella contiene <em>8 bit</em>, cioè un <em>byte</em>.</p>
+<p>Quante cellule ci sono?
+In realtà questa è una domanda trabocchetto…</p>
+<h2 id="i-tanti-tipi-di-memoria"><a class="header" href="#i-tanti-tipi-di-memoria">I tanti tipi di memoria</a></h2>
+<p>There are several memory chips in the Game Boy, but we can put them into two categories: <abbr title="Read-Only Memory">ROM</abbr> and <abbr title="Random Access Memory">RAM</abbr>
+<sup class="footnote-reference"><a href="#rom_ram_and">2</a></sup>.
+ROM simply designates memory that cannot be written to<sup class="footnote-reference"><a href="#rom_ro">3</a></sup>, and RAM memory that can be written to.</p>
+<p>Per via del loro funzionamento il processore ed i circuiti di memoria possono utilizzare un solo numero per gli indirizzi.
+Torniamo all’analogia dei “numeri civici”: ogni circuito di memoria è una strada, con la sua serie di numeri, ma il processore non ha idea di cosa sia una strada, si occupa solo di numeri civici.
+Per consentire al processore di parlare con più circuiti serve una sorta di “servizio postale”, il <em>selezionatore di circuito</em> (“chip selector” in inglese), che ha il compito di tradurre i numeri civici del processore in una via ed un numero civico effettivi.</p>
+<p>For example, let’s say a convention is established where addresses 0 through 1999 go to chip A’s addresses 0–1999, 2000–2999 to chip B’s 0–999, and 3000–3999 to chip C’s 0–999.
+Then, if the CPU asks for the byte at address 2791, the chip selector will ask chip B for the byte at its <em>own</em> address 791, and forward the reply to the CPU.</p>
+<p>Poiché gli indirizzi trattati dal processore non corrispondono direttamente a quelli dei circuiti si parla di indirizzi <em>logici</em> (qui, quelli del processore) e di indirizzi <em>fisici</em> (qui, quelli dei circuiti), e la corrispondenza è chiamata <em>mappa di memoria</em> (“memory map” in inglese).
+Poiché stiamo programmando il processore ci occuperemo solo di indirizzi <strong>logici</strong>, ma è fondamentale tenere presente che indirizzi diversi possono essere supportati da circuiti di memoria diversi, poiché ogni circuito ha caratteristiche uniche.</p>
+<p>This may sound complicated, so here is a summary:</p>
+<ul>
+<li>Memory stores numbers, each 8-bit on the Game Boy.</li>
+<li>Memory is accessed byte by byte, and the cell being accessed is determined by an <em>address</em>, which is just a number.</li>
+<li>The CPU deals with all memory uniformly, but there are several memory chips each with their own characteristics.</li>
+</ul>
+<h3 id="mappa-di-memoria-del-game-boy"><a class="header" href="#mappa-di-memoria-del-game-boy">Mappa di memoria del Game Boy</a></h3>
+<p>Adesso rispondiamo alla domanda che ci aveva portato a questa sezione: quante celle di memoria ci sono sul Game Boy?
+Ora possiamo riformulare meglio questa domanda come “quanti indirizzi logici ci sono?” o “quanti indirizzi fisici ci sono in totale?”.</p>
+<p>Gli indirizzi logici, che sono solo numeri, sono a 16 bit sul Game Boy.
+Pertanto, ci sono 2^16 = 65536 indirizzi logici, da $0000 a $FFFF.
+Ma quanti sono gli indirizzi fisici?
+Ecco una mappa della memoria <a href="https://gbdev.io/pandocs/Memory_Map.html">per gentile concessione di Pan Docs</a> (anche se la semplificherò un po’):</p>
+<div class="table-wrapper"><table><thead><tr><th>Start</th><th>End</th><th>Name</th><th>Description</th></tr></thead><tbody>
+<tr><td>$0000</td><td>$7FFF</td><td>ROM</td><td>The game ROM, supplied by the cartridge.</td></tr>
+<tr><td>$8000</td><td>$9FFF</td><td>VRAM</td><td>Video RAM, where graphics are stored and arranged.</td></tr>
+<tr><td>$A000</td><td>$BFFF</td><td>SRAM</td><td>Save RAM, optionally supplied by the cartridge to save data to.</td></tr>
+<tr><td>$C000</td><td>$DFFF</td><td>WRAM</td><td>Work RAM, general-purpose RAM for the game to store things in.</td></tr>
+<tr><td>$FE00</td><td>$FE9F</td><td>OAM</td><td>Object Attribute Memory, where “objects” are stored.</td></tr>
+<tr><td>$FF00</td><td>$FF7F</td><td>I/O</td><td>Neither ROM nor RAM, but this is where you control the console.</td></tr>
+<tr><td>$FF80</td><td>$FFFE</td><td>HRAM</td><td>High RAM, a tiny bit of general-purpose RAM which can be accessed faster.</td></tr>
+<tr><td>$FFFF</td><td>$FFFF</td><td>IE</td><td>A lone I/O byte that’s separated from the rest for some reason.</td></tr>
+</tbody></table>
+</div>
+<p>$8000 + $2000 + $2000 + $2000 + $A0 + $80 + $7F + 1 fanno in totale $E1A0, ovvero 57760 byte di memoria che si possono <em>effettivamente</em> usare.
+E a questo punto potreste chiedervi: “E i restanti 7776 byte? Cosa succede quando provo ad usarli?”; la risposta è: “Dipende, è complicato; evitate di accedervi”.</p>
+<h2 id="etichette"><a class="header" href="#etichette">Etichette</a></h2>
+<p>Ok, tutto questo è molto bello, ma non vi aspetterete certo che io tenga in mente tutti questi indirizzi per conto mio, giusto??
+Beh, non temere, perché abbiamo le etichette!</p>
+<p>Le etichette sono <a href="https://rgbds.gbdev.io/docs/v0.5.1/rgbasm.5#SYMBOLS">simboli</a> che in pratica permettono di assegnare un nome a un indirizzo di memoria.
+Un’etichetta viene dichiarata come alla riga 9 (<code>EntryPoint:</code>): all’inizio della riga si scrive il nome dell’etichetta, seguito da due punti, ed essa si riferirà al byte immediatamente successivo.
+Quindi, per esempio, <code>EntryPoint</code> si riferisce al <code>ld a, 0</code> subito dopo (più precisamente, al primo byte di quell’istruzione, ma ci arriveremo quando ci arriveremo).</p>
+<div class="box tip">
+<p>Sbirciando all’interno di <code>hardware.inc</code> si vedrà che, per esempio, <code>rNR52</code> non è definito come un’etichetta.
+Il motivo è che queste sono <em>costanti</em>, di cui parleremo più in là; visto che si usano in modo quasi identico alle etichette, per il momento le considereremo uguali.</p>
+</div>
+<p>Scrivere il nome di un’etichetta equivale a scrivere l’indirizzo del byte a cui fa riferimento (con alcune eccezioni che vedremo nella Parte Ⅱ).
+Per esempio, si consideri la <code>ld de, Tiles</code> alla riga 25.
+<code>Tiles</code> (riga 64) si riferisce al primo byte dei dati delle mattonelle; se assumiamo che i dati delle mattonelle finiscono per essere memorizzati a partire da $0193, allora <code>ld de, Tiles</code> è equivalente a <code>ld de, $0193</code>!</p>
+<h2 id="cosa-sono-queste-parentesi"><a class="header" href="#cosa-sono-queste-parentesi">Cosa sono queste parentesi?</a></h2>
+<p>Bene, siamo arrivati a questo punto perché volevamo sapere cosa significano le parentesi in <code>ld a, [de]</code>.
+In pratica, possono essere lette come “all’indirizzo…”.
+Per esempio, <code>ld a, b</code> può essere letto come “copia in <code>a</code> il valore memorizzato in <code>b</code>”; <code>ld a, [$5414]</code> si legge come “copia in <code>a</code> il valore memorizzato all’indirizzo $5414”, e <code>ld a, [de]</code> si legge come “copia in <code>a</code> il valore memorizzato all’indirizzo <code>de</code>”.
+Aspettate, cosa significa?
+Beh, se <code>de</code> contiene il valore $5414, allora <code>ld a, [de]</code> farà la stessa cosa di <code>ld a, [$5414]</code>.</p>
+<div class="box tip">
+<p>Se avete familiarità con il C, queste parentesi sono sostanzialmente il modo in cui viene implementato l’operatore di dereferenziazione.</p>
+</div>
+<h3 id="hli"><a class="header" href="#hli"><code>hli</code></a></h3>
+<p>I lettori attenti avranno notato il <code>ld [hli], a</code> appena sotto il <code>ld a, [de]</code> che abbiamo appena studiato.
+<code>[de]</code> ha senso perché è una delle coppie di registri che abbiamo visto un paio di lezioni fa, ma <code>[hli]</code>?
+In realtà, è una notazione speciale, che può essere scritta anche come <code>[hl+]</code>.
+Funziona come <code>[hl]</code>, ma <code>hl</code> viene <em>incrementato</em> subito dopo l’accesso alla memoria.
+<code>[hld]</code>/<code>[hl-]</code> è lo specchio di questa, <em>decrementando</em> <code>hl</code> invece di incrementarlo.</p>
+<h2 id="un-esempio"><a class="header" href="#un-esempio">Un esempio</a></h2>
+<p>Quindi, se osserviamo le prime due istruzioni di <code>CopyTiles</code>:</p>
+<pre><code class="language-rgbasm linenos start=29">	ld a, [de]
+	ld [hli], a
+</code></pre>
+<p>…possiamo vedere che stiamo copiando il byte in memoria <em>puntato</em> da <code>de</code> (cioè il cui indirizzo è contenuto in <code>de</code>) nel byte puntato da <code>hl</code>.
+Qui, <code>a</code> serve come memoria temporanea, poiché la CPU non è in grado di eseguire direttamente <code>ld [hl], [de]</code>.</p>
+<p>Già che ci siamo, esaminiamo il resto di <code>.copyTiles</code> nelle lezioni successive!</p>
+<hr />
+<div class="footnote-definition" id="memory_magnetic"><sup class="footnote-definition-label">4</sup>
+<p>Actually, this depends a lot on the type of memory.
+A lot of memory nowadays uses magnetic storage, but to keep the explanation simple, and to parallel the explanation of binary given earlier, let’s assume that current is being used.</p>
+</div>
+<div class="footnote-definition" id="rom_ram_and"><sup class="footnote-definition-label">2</sup>
+<p>There are other types of memory, such as flash memory or EEPROM, but only Flash has been used on the Game Boy, and for only a handful of games; so we can mostly forget about them.</p>
+</div>
+<div class="footnote-definition" id="rom_ro"><sup class="footnote-definition-label">3</sup>
+<p>No, really!
+Mask ROM is created by literally punching holes into a layer of silicon using acid, and e.g. the console’s boot ROM is made of hard-wired transitors within the CPU die.
+Good luck writing to that!
+<br>
+“ROM” is sometimes (mis)used to refer to “persistent memory” chips, such as flash memory, whose write functionality was disabled.
+Most bootleg / “repro” Game Boy cartridges you can find nowadays actually contain flash; this is why you can reflash them using specialized hardware, but original cartridges cannot be.</p>
+</div>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../part1/assembly.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../part1/header.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../part1/assembly.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../part1/header.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../js/linenos.js"></script>
+
+
+    </body>
+</html>

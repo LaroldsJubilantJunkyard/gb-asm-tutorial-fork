@@ -1,0 +1,390 @@
+<!DOCTYPE HTML>
+<html lang="it" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Basi di Assembly - GB ASM Tutorial</title>
+
+        <!-- Custom HTML head -->
+        <meta name="twitter:card" content="summary_large_image"/>
+        <meta name="twitter:site:id" content="@gbdev0"/>
+        <meta property="og:title" content="Basi di Assembly - GB ASM Tutorial" />
+        <meta property="og:image" content="https://gbdev.io/gb-asm-tutorial/assets/banner/1200x628.png" />
+        <meta property="og:site_name" content="GB ASM Tutorial"/>
+
+        <meta name="description" content="A complete guide to programming Game Boy games in assembly.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../css/custom.css">
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item affix "><a href="../index.html">Home</a></li><li class="chapter-item affix "><a href="../roadmap.html">Tabella di marcia</a></li><li class="chapter-item affix "><a href="../help-feedback.html">Aiuto</a></li><li class="chapter-item affix "><li class="part-title">Parte Ⅰ - Hello World!</li><li class="chapter-item "><a href="../part1/setup.html"><strong aria-hidden="true">1.</strong> Configurazione</a></li><li class="chapter-item "><a href="../part1/hello_world.html"><strong aria-hidden="true">2.</strong> Hello World!</a></li><li class="chapter-item "><a href="../part1/toolchain.html"><strong aria-hidden="true">3.</strong> Strumenti di lavoro</a></li><li class="chapter-item "><a href="../part1/bin_and_hex.html"><strong aria-hidden="true">4.</strong> Binario ed esadecimale</a></li><li class="chapter-item "><a href="../part1/registers.html"><strong aria-hidden="true">5.</strong> Registri</a></li><li class="chapter-item expanded "><a href="../part1/assembly.html" class="active"><strong aria-hidden="true">6.</strong> Basi di Assembly</a></li><li class="chapter-item "><a href="../part1/memory.html"><strong aria-hidden="true">7.</strong> Memoria</a></li><li class="chapter-item "><a href="../part1/header.html"><strong aria-hidden="true">8.</strong> L'header</a></li><li class="chapter-item "><a href="../part1/operations.html"><strong aria-hidden="true">9.</strong> Operazioni e flags</a></li><li class="chapter-item "><a href="../part1/jumps.html"><strong aria-hidden="true">10.</strong> Salti</a></li><li class="chapter-item "><a href="../part1/tracing.html"><strong aria-hidden="true">11.</strong> Tracciamento</a></li><li class="chapter-item "><div><strong aria-hidden="true">12.</strong> Grafica</div><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../part1/tiles.html"><strong aria-hidden="true">12.1.</strong> Tiles</a></li><li class="chapter-item "><a href="../part1/palettes.html"><strong aria-hidden="true">12.2.</strong> Palette</a></li><li class="chapter-item "><a href="../part1/tilemap.html"><strong aria-hidden="true">12.3.</strong> Tilemap</a></li></ol></li><li class="chapter-item "><a href="../part1/wrapup.html"><strong aria-hidden="true">13.</strong> In conclusione</a></li><li class="chapter-item affix "><li class="part-title">Parte Ⅱ - Il nostro primo gioco</li><li class="chapter-item "><a href="../part2/getting-started.html"><strong aria-hidden="true">14.</strong> Per iniziare</a></li><li class="chapter-item "><a href="../part2/objects.html"><strong aria-hidden="true">15.</strong> Oggetti</a></li><li class="chapter-item "><a href="../part2/functions.html"><strong aria-hidden="true">16.</strong> Funzioni</a></li><li class="chapter-item "><a href="../part2/input.html"><strong aria-hidden="true">17.</strong> Input</a></li><li class="chapter-item "><a href="../part2/collision.html"><strong aria-hidden="true">18.</strong> Collisioni</a></li><li class="chapter-item "><a href="../part2/bricks.html"><strong aria-hidden="true">19.</strong> Mattoncini</a></li><li class="chapter-item "><a href="../part2/wip.html"><strong aria-hidden="true">20.</strong> Lavori in corso</a></li><li class="chapter-item affix "><li class="part-title">Parte III — Il nostro secondo gioco</li><li class="chapter-item "><a href="../part3/getting-started.html"><strong aria-hidden="true">21.</strong> Come iniziare</a></li><li class="chapter-item "><a href="../part3/the-starter.html"><strong aria-hidden="true">22.</strong> Download the Starter</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../part3/project-structure.html"><strong aria-hidden="true">22.1.</strong> Struttura del progetto</a></li><li class="chapter-item "><a href="../part3/dependent-libraries.html"><strong aria-hidden="true">22.2.</strong> Dependent Libraries</a></li><li class="chapter-item "><a href="../part3/sprites-backgrounds.html"><strong aria-hidden="true">22.3.</strong> Sprites & Backgrounds</a></li><li class="chapter-item "><a href="../part3/sporbs-metasprites.html"><strong aria-hidden="true">22.4.</strong> Metasprites</a></li><li class="chapter-item "><a href="../part3/drawing-text.html"><strong aria-hidden="true">22.5.</strong> Drawing Text</a></li><li class="chapter-item "><a href="../part3/utilities.html"><strong aria-hidden="true">22.6.</strong> Included Utilities</a></li><li class="chapter-item "><a href="../part3/compilation.html"><strong aria-hidden="true">22.7.</strong> Compilation</a></li></ol></li><li class="chapter-item "><a href="../part3/game-state-management.html"><strong aria-hidden="true">23.</strong> Game State Management</a></li><li class="chapter-item "><a href="../part3/title-screen.html"><strong aria-hidden="true">24.</strong> Schermata del titolo</a></li><li class="chapter-item "><a href="../part3/story-screen.html"><strong aria-hidden="true">25.</strong> Schermata della storia</a></li><li class="chapter-item "><a href="../part3/gameplay.html"><strong aria-hidden="true">26.</strong> Gameplay</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../part3/object-pools.html"><strong aria-hidden="true">26.1.</strong> Object Pools</a></li><li class="chapter-item "><a href="../part3/scrolling-background.html"><strong aria-hidden="true">26.2.</strong> Sfondo scorrevole</a></li><li class="chapter-item "><a href="../part3/heads-up-interface.html"><strong aria-hidden="true">26.3.</strong> Heads-Up Interface</a></li><li class="chapter-item "><a href="../part3/the-player.html"><strong aria-hidden="true">26.4.</strong> Il giocatore</a></li><li class="chapter-item "><a href="../part3/bullets.html"><strong aria-hidden="true">26.5.</strong> Bullets</a></li><li class="chapter-item "><a href="../part3/enemies.html"><strong aria-hidden="true">26.6.</strong> Nemici</a></li><li class="chapter-item "><a href="../part3/collision.html"><strong aria-hidden="true">26.7.</strong> Rilevamento della collisione (collision detection)</a></li><li class="chapter-item "><a href="../part3/collision.html"><strong aria-hidden="true">26.8.</strong> Enemy Collisions</a></li></ol></li><li class="chapter-item "><a href="../part3/conclusion.html"><strong aria-hidden="true">27.</strong> Conclusione</a></li><li class="chapter-item affix "><a href="../next.html">Prossimi passi</a></li><li class="chapter-item affix "><a href="../resources.html">Risorse</a></li><li class="chapter-item affix "><a href="../thanks.html">Ringraziamenti</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">GB ASM Tutorial</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        <button id="language-toggle" class="icon-button" type="button"
+                                title="Change language" aria-label="Change language"
+                                aria-haspopup="true" aria-expanded="false"
+                                aria-controls="language-list">
+                            <i class="fa fa-globe"></i>
+                        </button>
+                        <ul id="language-list" class="theme-popup" aria-label="Languages" role="menu">
+                          <li role="none"><button role="menuitem" class="theme">
+                              <a id="en">English</a>
+                          </button></li>
+                          <li role="none"><button role="menuitem" class="theme">
+                              <a id="it">Italian</a>
+                          </button></li>
+                        </ul>
+
+                        <script>
+                          let langToggle = document.getElementById("language-toggle");
+                          let langList = document.getElementById("language-list");
+                          langToggle.addEventListener("click", (event) => {
+                              langList.style.display = langList.style.display == "block" ? "none" : "block";
+                          });
+                          let selectedLang = document.getElementById("it");
+                          selectedLang.parentNode.classList.add("theme-selected");
+
+                          // The path to the root, taking the current
+                          // language into account.
+                          let full_path_to_root = "../../";
+                          // The page path (mdbook only gives us
+                          // access to the path to the Markdown file).
+                          let path = "part1/assembly.md".replace(/\.md$/, ".html");
+                          for (let lang of langList.querySelectorAll("a")) {
+                              if (lang.id == "en") {
+                                  lang.href = `${full_path_to_root}${path}`;
+                              } else {
+                                  lang.href = `${full_path_to_root}${lang.id}/${path}`;
+                              }
+                          }
+                        </script>
+
+                        
+                        <a href="https://github.com/gbdev/gb-asm-tutorial" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/gbdev/gb-asm-tutorial/edit/main/po/it.po"
+                           title="Suggest an edit to the translation" aria-label="Suggest an edit to the translation">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="primi-passi-in-assembly"><a class="header" href="#primi-passi-in-assembly">Primi passi in Assembly</a></h1>
+<p>Bene, ora che sappiamo cosa <em>fanno</em> gli strumenti, vediamo che lingua parla RGBASM.
+Prenderò una breve porzione dell’inizio di <code>hello-world.asm</code>, in modo da essere d’accordo sui numeri di riga e da avere un’evidenziazione della sintassi anche se il vostro editor non la supporta.</p>
+<pre><code class="language-rgbasm linenos start=1">INCLUDE &quot;hardware.inc&quot;
+
+SECTION &quot;Header&quot;, ROM0[$100]
+
+	jp EntryPoint
+
+	ds $150 - @, 0 ; Make room for the header
+
+EntryPoint:
+	; Shut down audio circuitry
+	ld a, 0
+	ld [rNR52], a
+</code></pre>
+<p>Analizziamolo insieme.
+Sappi che per il momento salteremo <em>molte</em> delle funzionalità di RGBASM; se fossi curioso di saperne di più, dovrai aspettare fino alla seconda o terza parte oppure leggere la <a href="https://rgbds.gbdev.io/docs">documentazione</a>.</p>
+<h2 id="commenti"><a class="header" href="#commenti">Commenti</a></h2>
+<p>Iniziamo dalla riga 10, che dovrebbe essere grigia nel riquadro qui sopra.
+I punti e virgola <code>;</code> indicano un <em>commento</em>.
+I commenti (che finiscono alla fine della riga) sono <em>ignorati</em> dall’assembler, indipendentemente dal contenuto.
+Come vedi alla riga 7, puoi anche inserire commenti dopo aver scritto altro.</p>
+<p>I commenti sono molto importanti in tutti i linguaggi di programmazione: ti aiutano a descrivere la funzione del tuo codice.
+È più o meno la differenza tra “scalda il forno fino a 180°C” e “scalda il forno a 180°C, se lo scaldassi di più la torta brucerebbe”.
+I commenti sono utilissimi in ogni linguaggio di programmazione, ma in Assembly sono ancora più importanti: infatti, il codice Assembly è molto più astratto.</p>
+<h2 id="istruzioni"><a class="header" href="#istruzioni">Istruzioni</a></h2>
+<p>Assembly is a very line-based language.
+Each line can contain one of two things:</p>
+<ul>
+<li>a <em>directive</em>, which instructs RGBASM to do something, or</li>
+<li>an <em>instruction</em><sup class="footnote-reference"><a href="#instr_directive">1</a></sup>, which is written directly into the ROM.</li>
+</ul>
+<p>Parleremo delle direttive più avanti, per ora concentriamoci sulle istruzioni: per esempio, nello snippet qui sopra, ignoreremo le righe 1 (<code>INCLUDE</code>), 7 (<code>ds</code>) e 3 (<code>SECTION</code>).</p>
+<p>Per continuare l’analogia con la preparazione di una torta, le istruzioni sono come i passi di una ricetta.
+Il processore (<abbr title="Central Processing Unit">CPU</abbr>) esegue un’istruzione alla volta. Istruzione dopo istruzione… dopo un po’ si arriva al risultato!
+Come cuocere una torta, disegnare “Hello World”, oppure mostrarti un tutorial sull’Assembly del GameBoy!</p>
+<p>Le istruzioni sono composte da una <em>mnemonica</em>, un nome con cui le puoi invocare, e dei <em>parametri</em>, ovvero su cosa va eseguita l’operazione.
+Ad esempio: in “sciogli il cioccolato ed il burro in una padella” l’istruzione è <em>tutta la frase</em>; la mnemonica sarebbe l’<em>azione</em>, ovvero sciogli, mentre i parametri sono gli <em>oggetti</em> della frase (cioccolato, burro, padella).</p>
+<p>Cominciamo dall’istruzione più importante: <strong><code>ld</code></strong>.
+<code>ld</code> sta per “<abbr title="LoaD in inglese">carica</abbr>”, e semplicemente copia i dati contenuti nel secondo parametro (“<a href="https://en.wikipedia.org/wiki/Sides_of_an_equation"><abbr title="Right-Hand Side">RHS</abbr></a>”) nel primo (“<a href="https://en.wikipedia.org/wiki/Sides_of_an_equation"><abbr title="Left-Hand Side">LHS</abbr></a>”).
+Per esempio, guardiamo la riga 11 del nostro programma, <code>ld a, 0</code>: copia (“carica”) il numero zero nel registro <code>a</code><sup class="footnote-reference"><a href="#ld_imm_from">2</a></sup>.
+Per fare un altro esempio, a riga 33 troviamo <code>ld a, b</code>: significa semplicemente “copia il valore di <code>b</code> in <code>a</code>.</p>
+<div class="table-wrapper"><table><thead><tr><th>Instruction</th><th>Mnemonic</th><th>Effect</th></tr></thead><tbody>
+<tr><td>Load</td><td><code>ld</code></td><td>Copies values around</td></tr>
+</tbody></table>
+</div><div class="box tip decorated"><p>ℹ️</p>
+<p>Per via delle limitazioni del processore, non tutte le combinazioni di operandi sono valide per <code>ld</code> e per molte altre istruzioni; ne parleremo in seguito, quando arriverà il momento di scrivere il nostro codice.</p>
+</div>
+<div class="box tip decorated"><p>🤔</p>
+<p>RGBDS ha una <a href="https://rgbds.gbdev.io/docs/gbz80.7">lista delle istruzioni del GameBoy</a> che vale la pena tenere tra i preferiti, e che si può anche consultare dal terminale scrivendo <code>man 7 gbz80</code> se RGBDS è installato sulla propria macchina (tranne su Windows…).
+Le descrizioni che trovate in quella pagina sono più concise: sono intese come un promemoria, non come un tutorial.</p>
+</div>
+<h2 id="direttive"><a class="header" href="#direttive">Direttive</a></h2>
+<p>Quindi, in un certo senso, le istruzioni sono destinate al processore del GameBoy mentre i commenti sono destinati al programmatore.
+Ma alcune righe non sono né l’una né l’altra cosa, e sono invece dei metadati destinati a RGBDS stesso.
+Queste sono chiamate <em>direttive</em> e il nostro “Hello World” ne contiene tre.</p>
+<h3 id="includere-un-altro-file"><a class="header" href="#includere-un-altro-file">Includere un altro file</a></h3>
+<pre><code class="language-rgbasm linenos">INCLUDE &quot;hardware.inc&quot;
+</code></pre>
+<p>La riga 1 <em>include</em> <code>hardware.inc</code><sup class="footnote-reference"><a href="#hw_inc_directives">3</a></sup>.
+<code>Include</code>ndo un file è come se copiassimo il suo contenuto alla riga dove inseriamo la direttiva.</p>
+<p>Così facendo, si può riciclare facilmente il codice in diversi file: se, ad esempio, due file <code>a.asm</code> e <code>b.asm</code> includono <code>hardware.inc</code> basta modificare il file perché le modifiche si applichino ad <code>a.asm</code> e <code>b.asm</code>.
+Se invece copiassi a mano il contenuto di <code>hardware.inc</code> in <code>a.asm</code> e <code>b.asm</code> dovresti modificare il contenuto di entrambi ogni volta che vuoi apportare un cambiamento, che non è solo uno spreco di tempo ma aumenta la possibilità di commettere errori.</p>
+<p><code>hardware.inc</code> definisce alcune costanti molto utili per interfacciarsi con l’hardware del GameBoy.
+Le costanti non sono altro che dei nomi a cui è assegnato un valore: scrivere una costante equivale a scrivere il valore che le è assegnato.
+Questo torna molto utile: è molto più semplice ricordare il registro “<strong>LCD</strong> <strong>C</strong>ontrol” (impostazioni dello schermo) col nome <code>rLCDC</code> piuttosto che ricordare l’indirizzo <code>$FF40</code>.</p>
+<p>Parleremo delle costanti in modo più approfondito nella Parte Ⅱ.</p>
+<h3 id="sezioni"><a class="header" href="#sezioni">Sezioni</a></h3>
+<p>Spieghiamo innanzitutto che cos’è una “sezione”, poi vedremo che cosa fa la riga 3.</p>
+<p>Una sezione rappresenta un intervallo contiguo di memoria che, di base, finisce da <em>qualche</em> parte non nota in anticipo.
+Se si vuole vedere dove finisce ogni sezione si può chiedere a RGBLINK di generare un “file mappa” con l’opzione <code>-m</code>:</p>
+<pre><code><span class="console-line hljs-meta"></span><span class="language-bash">rgblink hello-world.o -m hello-world.map</span>
+</code></pre>
+<p>…e possiamo vedere, per esempio, dove è finita la sezione <code>&quot;Tilemap&quot;</code>:</p>
+<pre><code>  SECTION: $05a6-$07e5 ($0240 bytes) [&quot;Tilemap&quot;]
+</code></pre>
+<p>Le sezioni non possono essere divise da RGBDS, che è utile ad esempio per il codice poiché il processore esegue le istruzioni una dopo l’altra (a parte con i salti, che vedremo più avanti).
+Va trovato il giusto equilibrio per il numero di sezioni: non troppe ma neanche troppo poche, anche se in genere non ha molta importanza fino a quando non si inizia a parlare di banche di memoria.</p>
+<p>Quindi, per ora, assumiamo che una sezione debba contenere cose che “vanno insieme” dal punto di vista topico, ed esaminiamo una delle nostre.</p>
+<pre><code class="language-rgbasm linenos start=3">SECTION &quot;Header&quot;, ROM0[$100]
+</code></pre>
+<p>Quindi!
+Cosa fa questa riga?
+Altro non è che la dichiarazione di una nuova sezione; tutte le istruzioni e i dati dopo questa riga e fino alla successiva dichiarazione <code>SECTION</code> saranno inseriti in questa sezione appena creata.
+Prima della prima direttiva <code>SECTION</code> non c’è una sezione “attiva”: scrivere dati o codice al di fuori di una sezione ci darà l’errore <code>Cannot output data outside of a SECTION</code>.</p>
+<p>Il nome della nuova sezione è “<code>Header</code>”.
+I nomi delle sezioni possono contenere qualsiasi carattere (e anche essere vuoti, se si vuole) e devono essere unici<sup class="footnote-reference"><a href="#nome_sezione">4</a></sup>.
+La parola chiave <code>ROM0</code> indica a quale “tipo di memoria” appartiene la sezione (<a href="https://rgbds.gbdev.io/docs/v0.5.2/rgbasm.5#SECTIONS">ecco un elenco</a>).
+Ne parleremo nella Parte Ⅱ.</p>
+<p>Dove dice <code>[100$]</code> invece è più interessante, perché è un’indicazione speciale per questa sezione.
+Se ricordi, prima abbiamo detto che:</p>
+<blockquote>
+<p>a section […] by default, ends up <em>somewhere</em> not known in advance.</p>
+</blockquote>
+<p>Però alcune parti della memoria sono speciali, e quindi a volte è necessario che una sezione specifica copra un intervallo di memoria specifico.
+Per permetterlo, RGBASM ha la sintassi <code>[addr]</code> che <em>forza</em> l’indirizzo iniziale della sezione a essere <code>addr</code>.</p>
+<p>In questo caso, l’intervallo di memoria $100-$14F è speciale perché è l’header della ROM.
+Parleremo dell’header tra un paio di lezioni, ma per il momento basta sapere che <strong>non</strong> dobbiamo inserire né codice né dati in quello spazio.
+E come facciamo?
+Innanzitutto, iniziamo una sezione all’indirizzo $100, dopodiché riserviamo un po’ di spazio.</p>
+<h3 id="lasciare-spazio"><a class="header" href="#lasciare-spazio">Lasciare spazio</a></h3>
+<pre><code class="language-rgbasm linenos start=5">	jp EntryPoint
+
+	ds $150 - @, 0 ; Make room for the header
+</code></pre>
+<p>La riga 7 afferma di “fare spazio per l’header”, di cui ho parlato brevemente poco sopra.
+Per ora, concentriamoci su ciò che <code>ds</code> fa effettivamente.</p>
+<p><code>ds</code> è usato per allocare <em>staticamente</em> della memoria.
+Riserva un certo numero di byte, che sono impostati ad un certo valore dato.
+Il primo argomento di <code>ds</code>, in questo caso <code>$150 - @</code>, è <em>quanti byte riservare</em>.
+Il secondo argomento (che è opzionale), in questo caso <code>0</code>, è <em>il valore a cui impostare ogni byte riservato</em><sup class="footnote-reference"><a href="#ds_pattern">5</a></sup>.</p>
+<p>Vedremo perché questi byte devono essere riservati in un paio di lezioni.</p>
+<p>È importante notare che il primo argomento è un’<em>espressione</em>.
+RGBDS (fortunatamente!) supporta l’inserimento di espressioni arbitrarie pressoché ovunque.
+Quest’espressione è una semplice sottrazione: $150 meno <code>@</code>, che è un simbolo speciale che sta per “l’indirizzo in memoria attuale”.</p>
+<div class="box tip">
+<p>Un simbolo è essenzialmente “un nome associato a un valore”, di solito un numero.
+Nel corso dell’esercitazione esploreremo i diversi tipi di simboli, a partire dalle etichette nella prossima sezione.</p>
+<p>Un simbolo numerico utilizzato in un’espressione viene sostituito dal suo valore, che dev’essere noto al momento della compilazione della ROM; in particolare, non può dipendere dal contenuto di alcun registro.</p>
+</div>
+<p>Ora vi starete chiedendo cosa siano questi “indirizzi di memoria” di cui continuo a parlare.
+Andiamo subito a scoprirlo!</p>
+<hr />
+<div class="footnote-definition" id="instr_directive"><sup class="footnote-definition-label">1</sup>
+<p>Technically, instructions in RGBASM are implemented as directives, basically writing their encoded form to the ROM; but the distinction between the instructions in the source code and those in the final ROM is not worth bringing up right now.</p>
+</div>
+<div class="footnote-definition" id="ld_imm_from"><sup class="footnote-definition-label">2</sup>
+<p>The curious reader may ask where the value is copied <em>from</em>. The answer is simply that the “immediate” byte ($00 in this example) is stored in ROM just after the instruction’s opcode byte, and it’s what gets copied to <code>a</code>.
+We will come back to this when we talk about how instructions are encoded later on.</p>
+</div>
+<div class="footnote-definition" id="hw_inc_directives"><sup class="footnote-definition-label">3</sup>
+<p><code>hardware.inc</code> itself contains more directives, in particular to define a lot of symbols.
+They will be touched upon much later, so we won’t look into <code>hardware.inc</code> yet.</p>
+</div>
+<div class="footnote-definition" id="sect_name"><sup class="footnote-definition-label">6</sup>
+<p>Section names actually only need to be unique for “plain” sections, and function differently with “unionized” and “fragment” sections, which we will discuss much later.</p>
+</div>
+<div class="footnote-definition" id="ds_pattern"><sup class="footnote-definition-label">5</sup>
+<p>Actually, since RGBASM 0.5.0, <code>ds</code> can accept a <em>list</em> of bytes, and will repeat the pattern for as many bytes as specified.
+It just complicates the explanation slightly, so I omitted it for now.
+Also, if the argument is omitted, it defaults to what is specified using the <code>-p</code> option <strong>to RGBASM</strong>.</p>
+</div>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../part1/registers.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../part1/memory.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../part1/registers.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../part1/memory.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../js/linenos.js"></script>
+
+
+    </body>
+</html>
