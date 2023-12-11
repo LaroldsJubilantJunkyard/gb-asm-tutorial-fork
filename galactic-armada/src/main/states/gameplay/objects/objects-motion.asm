@@ -9,63 +9,87 @@ MoveObjectAtHL_Up::
 
     ; Remember the starting address for the object
     push bc
+    push hl
 
     call GetSpeedByteInB
-
-    push hl
 
     ; move to the speed byte
     ld a, l
     add a, object_yLowByte
     ld l, a
 
-    jp Decrease
+    call DecreaseHL_ByB
+
+    ; return to the front of the object
+    pop hl
+    pop bc
+    
+    ret
+
 
 MoveObjectAtHL_Down::
 
     ; Remember the starting address for the object
     push bc
+    push hl
 
     call GetSpeedByteInB
-
-    push hl
 
     ; move to the speed byte
     ld a, l
     add a, object_yLowByte
     ld l, a
 
-    jp Increase
+    call IncreaseHL_ByB
+
+    ; return to the front of the object
+    pop hl
+    pop bc
+    
+    ret
+
 
 MoveObjectAtHL_Left::
 
     ; Remember the starting address for the object
     push bc
+    push hl
 
     call GetSpeedByteInB
-
-    push hl
 
     ; move to the x low byte
     inc hl 
 
-    jp Decrease
+    call GetSpeedByteInB
+    call DecreaseHL_ByB
+
+    ; return to the front of the object
+    pop hl
+    pop bc
+    
+    ret
+
 
 MoveObjectAtHL_Right::
 
     ; Remember the starting address for the object
     push bc
+    push hl
 
     call GetSpeedByteInB
-
-    push hl
 
     ; move to the x low byte
     inc hl 
 
-    jp Increase
+    call IncreaseHL_ByB
 
-Increase:
+    ; return to the front of the object
+    pop hl
+    pop bc
+
+    ret
+
+IncreaseHL_ByB:
 
     ; decrease the value in the low byte by 'b'
     ld a, [hl]
@@ -77,9 +101,9 @@ Increase:
     adc a,0
     ld [hl], a
 
-    jp EndMove
+    ret
 
-Decrease:
+DecreaseHL_ByB:
 
     ; decrease the value in the low byte by 'b'
     ld a, [hl]
@@ -91,10 +115,4 @@ Decrease:
     sbc a,0
     ld [hl], a
 
-EndMove:
-
-    ; return to the front of the object
-    pop hl
-    pop bc
-
-    ret
+ret

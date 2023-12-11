@@ -15,13 +15,6 @@ mPlayerFlash: dw
 ; ANCHOR: player-data
 SECTION "Player", ROM0
 
-playerShipTileData: INCBIN "src/generated/sprites/player-ship.2bpp"
-playerShipTileDataEnd:
-
-playerTestMetaSprite::
-    .metasprite1    db 0,0,0,0
-    .metasprite2    db 0,8,2,0
-    .metaspriteEnd  db 128
 ; ANCHOR_END: player-data
 
 ; ANCHOR: player-initialize
@@ -53,15 +46,10 @@ InitializePlayer::
     ld a, 0
     ld [mPlayerFlash+0],a
     ld [mPlayerFlash+1],a
-    
-CopyPlayerTileDataIntoVRAM:
-    ; Copy the player's tile data into VRAM
-	ld de, playerShipTileData
-	ld hl, PLAYER_TILES_START
-	ld bc, playerShipTileDataEnd - playerShipTileData
-    call CopyDEintoMemoryAtHL
 
-    ret;
+    call CopyPlayerTileDataIntoVRAM
+
+    ret
 ; ANCHOR_END: player-initialize
 
 ; ANCHOR: player-update-start

@@ -101,4 +101,22 @@ DamageObjectAtHL::
 
     pop hl
 
+    push hl
+
+    ld a, l
+    add a, object_healthByte
+    ld l, a
+
+    ld a, [hl]
+    cp a
+    jp z, DamageObjectAtHL_Done
+
+    ; Decrease and update
+    dec a
+    ld [hl], a
+
+DamageObjectAtHL_Done:
+
+    pop hl
+
     ret

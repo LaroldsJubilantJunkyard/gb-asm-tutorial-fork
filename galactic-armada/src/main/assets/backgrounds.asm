@@ -1,7 +1,6 @@
 
 INCLUDE "src/main/utils/hardware.inc"
-SECTION "Backgrounds1",  ROM0
- 
+SECTION "Backgrounds",  ROM0
 
 ljjSplashScreenTileData: INCBIN "src/generated/backgrounds/ljj-splash-screen.2bpp"
 ljjSplashScreenTileDataEnd:
@@ -24,12 +23,6 @@ DrawLaroldsJubilantJunkyardSplashScreen::
 	call CopyDEintoMemoryAtHL
 	
 	ret
-
-	
-; ANCHOR: draw-title-screen
-
-
-SECTION "Backgrounds", ROM0
 
 titleScreenTileData: INCBIN "src/generated/backgrounds/title-screen.2bpp"
 titleScreenTileDataEnd:

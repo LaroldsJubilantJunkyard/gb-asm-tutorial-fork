@@ -153,8 +153,6 @@ UpdateEnemies_DeActivateEnemy:
 
 ; ANCHOR_END: enemies-update-deactivate
 
-
-
 InitializeGlobalEnemiesVariables::
     
 
